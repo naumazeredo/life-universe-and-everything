@@ -26,6 +26,17 @@ Any help is welcome!
   - [ ] Sectors
   - [ ] Random events
 
+# Dependencies
+
+- [SDL2](https://www.libsdl.org/download-2.0.php)
+- [SDL2 image](https://www.libsdl.org/projects/SDL_image)
+
+in Ubuntu 16.04:
+
+```
+$ sudo apt install libsdl2-dev libsdl2-image-dev
+```
+
 # License
 
 The game is licensed under the [BSD License](https://opensource.org/licenses/BSD-2-Clause):
