@@ -12,8 +12,9 @@ Any help is welcome!
 
 - [ ] Utility
   - [ ] Vec2 (?)
+  - [x] Inttypes
 - [ ] Engine
-  - [ ] Limit framerate
+  - [x] Limit framerate
   - [x] Textures
   - [x] Sprites
   - [ ] Buttons
