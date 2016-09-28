@@ -18,6 +18,10 @@ Any help is welcome!
   - [x] Sprites
   - [ ] Buttons
   - [ ] Audio
+  - [ ] Timer
+    - [ ] Game time
+    - [ ] Pause
+    - [ ] Time scaling
 - [ ] Game
   - [ ] Main menu
   - [ ] Ships
