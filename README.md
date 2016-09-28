@@ -10,9 +10,12 @@ Any help is welcome!
 
 # To-Do list
 
+- [ ] Utility
+  - [ ] Vec2 (?)
 - [ ] Engine
+  - [ ] Limit framerate
   - [x] Textures
-  - [ ] Sprites
+  - [x] Sprites
   - [ ] Buttons
   - [ ] Audio
 - [ ] Game

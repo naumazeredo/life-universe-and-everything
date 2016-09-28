@@ -3,7 +3,6 @@
  */
 #include "game.h"
 
-#include <cstdio>
 #include <SDL2/SDL.h>
 #include "texture_manager.h"
 
@@ -44,7 +43,6 @@ Game::
 void Game::
 loop() {
   SDL_Event event;
-
   while (1) {
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_QUIT) {
