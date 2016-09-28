@@ -9,10 +9,6 @@
 #include "game.h"
 
 Texture::
-Texture() : texture_(nullptr)
-{}
-
-Texture::
 Texture(const std::string& path) : Texture() {
   load(path);
 }
@@ -23,6 +19,12 @@ load(const std::string& path) {
 
   // TODO: error checking
   SDL_Surface* surface = IMG_Load(path.c_str());
+
+  if (!surface) {
+    // TODO: log error correctly
+    printf("Could not find image %s: %s\n", path.c_str(), IMG_GetError());
+    return;
+  }
 
   texture_ = SDL_CreateTextureFromSurface(Game::getInstance().getRenderer(), surface);
 

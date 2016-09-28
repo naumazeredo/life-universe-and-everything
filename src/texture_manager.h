@@ -26,7 +26,7 @@ public:
     return instance;
   }
 
-  Texture& loadTexture(const std::string&);
+  Texture loadTexture(const std::string&);
   void destroyAllTextures();
 
 private:

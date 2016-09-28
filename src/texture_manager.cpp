@@ -8,7 +8,7 @@ TextureManager::
   destroyAllTextures();
 }
 
-Texture& TextureManager::
+Texture TextureManager::
 loadTexture(const std::string& path) {
   auto it = textures_.find(path);
   if (it != textures_.end()) {
