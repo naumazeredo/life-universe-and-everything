@@ -4,6 +4,7 @@
 #include "game.h"
 
 #include <SDL2/SDL.h>
+#include "util/types.h"
 #include "texture_manager.h"
 
 void Game::
@@ -42,6 +43,8 @@ Game::
 
 void Game::
 loop() {
+  u32 lastTime = SDL_GetTicks();
+
   SDL_Event event;
   while (1) {
     while (SDL_PollEvent(&event)) {
@@ -53,6 +56,13 @@ loop() {
     SDL_RenderClear(renderer_);
     logic();
     SDL_RenderPresent(renderer_);
+
+    // Framelimit
+    u32 currentTime = SDL_GetTicks();
+    if (currentTime - lastTime < 1000 / 60) {
+      SDL_Delay(1000 / 60 - (currentTime - lastTime));
+      lastTime = currentTime;
+    }
   }
 }
 
