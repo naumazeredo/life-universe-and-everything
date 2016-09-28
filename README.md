@@ -10,7 +10,21 @@ Any help is welcome!
 
 # To-Do list
 
-- [ ] Create To-Do list!
+- [ ] Engine
+  - [ ] Sprites
+  - [ ] Buttons
+- [ ] Game
+  - [ ] Main menu
+  - [ ] Ships
+    - [ ] Ship building
+    - [ ] Systems/subsystems
+    - [ ] Ship battle
+    - [ ] Crew
+      - [ ] Crew movement
+      - [ ] Crew fight
+  - [ ] Races
+  - [ ] Sectors
+  - [ ] Random events
 
 # License
 
