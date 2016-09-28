@@ -11,7 +11,7 @@ class TextureManager;
 
 class Texture {
 public:
-  Texture();
+  Texture() = default;
   Texture(const std::string&);
 
   void load(const std::string&);
@@ -25,6 +25,6 @@ public:
   inline int getHeight() const { return height_; }
 
 private:
-  SDL_Texture* texture_;
+  SDL_Texture* texture_ = nullptr;
   int width_, height_;
 };
