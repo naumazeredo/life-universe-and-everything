@@ -1,14 +1,15 @@
 /**
   game.cpp
  */
+#include "game.h"
 
 #include <cstdio>
 #include <SDL2/SDL.h>
-#include "game.h"
+#include "texture_manager.h"
 
-Game::
-Game(const std::string& name, int w, int h) {
-  // TODO: log error
+void Game::
+start(const std::string& name, int w, int h) {
+  // TODO: error checking
   SDL_Init(SDL_INIT_VIDEO);
 
   window_ = SDL_CreateWindow(
@@ -16,21 +17,32 @@ Game(const std::string& name, int w, int h) {
     SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
     w, h,
     0
-    //SDL_WINDOW_OPENGL
   );
 
   renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
+
+  // Run game
+  loop();
 }
+
+Game::
+Game() :
+    window_(nullptr), renderer_(nullptr),
+    textureManager_(TextureManager::getInstance())
+{}
 
 Game::
 ~Game() {
   SDL_DestroyRenderer(renderer_);
   SDL_DestroyWindow(window_);
   SDL_Quit();
+
+  renderer_ = nullptr;
+  window_   = nullptr;
 }
 
 void Game::
-run() {
+loop() {
   SDL_Event event;
 
   while (1) {
@@ -41,6 +53,12 @@ run() {
     }
 
     SDL_RenderClear(renderer_);
+    logic();
     SDL_RenderPresent(renderer_);
   }
 }
+
+void Game::
+logic() {
+}
+

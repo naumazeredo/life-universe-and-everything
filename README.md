@@ -11,8 +11,10 @@ Any help is welcome!
 # To-Do list
 
 - [ ] Engine
+  - [x] Textures
   - [ ] Sprites
   - [ ] Buttons
+  - [ ] Audio
 - [ ] Game
   - [ ] Main menu
   - [ ] Ships
