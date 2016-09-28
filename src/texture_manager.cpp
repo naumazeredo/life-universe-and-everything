@@ -3,9 +3,18 @@
  */
 #include "texture_manager.h"
 
+#include <SDL2/SDL_image.h>
+
+TextureManager::
+TextureManager() {
+  // TODO: error checking
+  IMG_Init(IMG_INIT_PNG);
+}
+
 TextureManager::
 ~TextureManager() {
   destroyAllTextures();
+  IMG_Quit();
 }
 
 Texture TextureManager::
