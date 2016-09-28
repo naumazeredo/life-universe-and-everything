@@ -31,7 +31,7 @@ public:
 
 private:
   // Singleton private constructor
-  TextureManager() = default;
+  TextureManager();
 
   std::map<std::string, Texture> textures_;
 };
