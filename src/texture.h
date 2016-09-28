@@ -17,8 +17,12 @@ public:
   void load(const std::string&);
   void destroy();
 
-  void draw(int, int);
+  void draw(int, int) const;
+  void draw(int, int, int, int) const;
   //void drawFrame();
+
+  inline int getWidth() const  { return width_; }
+  inline int getHeight() const { return height_; }
 
 private:
   SDL_Texture* texture_;

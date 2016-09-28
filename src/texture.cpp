@@ -39,11 +39,14 @@ destroy() {
 }
 
 void Texture::
-draw(int x, int y) {
+draw(int x, int y) const {
+  draw(x, y, width_, height_);
+}
+
+void Texture::
+draw(int x, int y, int w, int h) const {
   if (!texture_)
     return;
-
-  SDL_Rect dest { x, y, width_, height_ };
-
+  SDL_Rect dest { x, y, w, h};
   SDL_RenderCopy(Game::getInstance().getRenderer(), texture_, nullptr, &dest);
 }
