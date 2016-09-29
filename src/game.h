@@ -9,6 +9,7 @@
 struct SDL_Window;
 struct SDL_Renderer;
 class TextureManager;
+class FontManager;
 
 class Game {
 public:
@@ -40,4 +41,5 @@ private:
   SDL_Window*     window_;
   SDL_Renderer*   renderer_;
   TextureManager& textureManager_;
+  FontManager&    fontManager_;
 };
