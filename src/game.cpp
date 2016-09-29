@@ -5,7 +5,7 @@
 
 #include <SDL2/SDL.h>
 #include "util/types.h"
-#include "texture_manager.h"
+#include "texturemanager.h"
 #include "fontmanager.h"
 
 void Game::

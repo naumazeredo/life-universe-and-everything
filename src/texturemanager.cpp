@@ -1,7 +1,7 @@
 /**
-  texture_manager.cpp
+  texturemanager.cpp
  */
-#include "texture_manager.h"
+#include "texturemanager.h"
 
 #include <SDL2/SDL_image.h>
 
