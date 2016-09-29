@@ -41,11 +41,12 @@ Any help is welcome!
 
 - [SDL2](https://www.libsdl.org/download-2.0.php)
 - [SDL2 image](https://www.libsdl.org/projects/SDL_image)
+- [SDL2 ttf](https://www.libsdl.org/projects/SDL_ttf)
 
 in Ubuntu 16.04:
 
 ```
-$ sudo apt install libsdl2-dev libsdl2-image-dev
+$ sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
 ```
 
 # License

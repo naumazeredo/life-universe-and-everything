@@ -8,6 +8,7 @@
 
 struct SDL_Texture;
 class TextureManager;
+class Font;
 
 class Texture {
 public:
@@ -15,6 +16,7 @@ public:
   Texture(const std::string&);
 
   void load(const std::string&);
+  void loadFromText(const std::string&, const Font&);
   void destroy();
 
   void draw(int, int) const;
