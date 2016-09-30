@@ -23,9 +23,9 @@ public:
   void draw(int, int) const;
   void draw(Vec2) const;
   void draw(Rect) const;
-  void drawFrame(int, int, Rect) const;
-  void drawFrame(Vec2, Rect) const;
-  void drawFrame(Rect, Rect) const;
+  void drawClip(int, int, Rect) const;
+  void drawClip(Vec2, Rect) const;
+  void drawClip(Rect, Rect) const;
 
   inline int getWidth() const  { return width_; }
   inline int getHeight() const { return height_; }

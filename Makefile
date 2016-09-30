@@ -3,7 +3,7 @@ FLAGS  = -Wall
 CC_FLAGS = -std=c++11
 LD_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
-SRCS := $(wildcard src/*.cpp)
+SRCS := $(wildcard src/**.cpp)
 OBJS := $(addprefix obj/,$(notdir $(SRCS:.cpp=.o)))
 
 EXE=bin/lue.out

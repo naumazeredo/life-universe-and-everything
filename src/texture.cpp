@@ -74,31 +74,33 @@ draw(Rect dest) const {
   if (!texture_)
     return;
 
+  SDL_Rect drect = dest;
   SDL_RenderCopy(
     Game::getInstance().getRenderer(), texture_,
-    nullptr, &dest
+    nullptr, &drect
   );
 }
 
 void Texture::
-drawFrame(int x, int y, Rect clip) const {
-  drawFrame({ x, y, clip.w, clip.h }, clip);
+drawClip(int x, int y, Rect clip) const {
+  drawClip({ x, y, clip.w, clip.h }, clip);
 }
 
 void Texture::
-drawFrame(Vec2 pos, Rect clip) const {
-  drawFrame({ pos.x, pos.y, clip.w, clip.h }, clip);
+drawClip(Vec2 pos, Rect clip) const {
+  drawClip({ pos.x, pos.y, clip.w, clip.h }, clip);
 }
 
 void Texture::
-drawFrame(Rect dest, Rect clip) const {
+drawClip(Rect dest, Rect clip) const {
   if (!texture_)
     return;
 
+  SDL_Rect drect = dest, crect = clip;
   SDL_RenderCopyEx(
     Game::getInstance().getRenderer(),
     texture_,
-    &clip, &dest,
+    &crect, &drect,
     0, nullptr, SDL_FLIP_NONE
   );
 }
