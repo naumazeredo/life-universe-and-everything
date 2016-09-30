@@ -5,7 +5,9 @@
 
 #include <SDL2/SDL.h>
 #include "util/types.h"
-#include "texture_manager.h"
+#include "texturemanager.h"
+#include "fontmanager.h"
+#include "sprite.h"
 
 void Game::
 start(const std::string& name, int w, int h) {
@@ -28,7 +30,8 @@ start(const std::string& name, int w, int h) {
 Game::
 Game() :
     window_(nullptr), renderer_(nullptr),
-    textureManager_(TextureManager::getInstance())
+    textureManager_(TextureManager::getInstance()),
+    fontManager_(FontManager::getInstance())
 {}
 
 Game::

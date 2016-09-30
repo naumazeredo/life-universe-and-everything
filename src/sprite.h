@@ -5,29 +5,32 @@
 
 #include <string>
 #include "texture.h"
+#include "util/types.h"
 
 class Sprite {
 public:
+  Sprite() = default;
   Sprite(const std::string&);
-  Sprite(const std::string&, float, float);
+  Sprite(const std::string&, Vec2f);
+  Sprite(const std::string&, Vec2f, Rect);
   Sprite(Texture);
-  Sprite(Texture, float, float);
+  Sprite(Texture, Vec2f);
+  Sprite(Texture, Vec2f, Rect);
 
   inline Texture getTexture() const { return texture_; }
-  inline float getX() const           { return x_; }
-  inline float getY() const           { return y_; }
+  inline Vec2f getSize() const      { return size_; }
+  inline Rect getClip() const       { return clip_; }
 
-  inline void setTexture(Texture texture) { texture_ = texture; }
-  inline void setX(float x)               { x_ = x; }
-  inline void setY(float y)               { y_ = y; }
+  void setTexture(Texture);
+  inline void setSize(Vec2f size)     { size_ = size; }
+  inline void setClip(Rect clip)      { clip_ = clip; }
 
-  void draw();
+  void draw(int, int);
+  void draw(Vec2);
 
 private:
   Texture texture_;
 
-  float x_ = 0.0f;
-  float y_ = 0.0f;
-
-  //int clipX_, clipY_, clipW_, clipH_;
+  Vec2f size_ = { 0.0f, 0.0f };
+  Rect clip_  = { 0, 0, 0, 0 };
 };
