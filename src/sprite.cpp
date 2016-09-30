@@ -4,26 +4,36 @@
 #include "sprite.h"
 
 Sprite::
-Sprite(const std::string& path) :
-    texture_(path)
-{}
+Sprite(const std::string& path) : texture_(path) {
+  clip_ = { 0, 0, texture_.getWidth(), texture_.getHeight() };
+}
 
 Sprite::
-Sprite(const std::string& path, float x, float y) :
-    texture_(path), x_(x), y_(y)
-{}
+Sprite(const std::string& path, Vec2f pos) : Sprite(path) {
+  pos_ = pos;
+}
 
 Sprite::
-Sprite(Texture texture) :
-    texture_(texture)
-{}
+Sprite(const std::string& path, Vec2f pos, Rect clip) : Sprite(path, pos) {
+  clip_ = clip;
+}
 
 Sprite::
-Sprite(Texture texture, float x, float y) :
-    texture_(texture), x_(x), y_(y)
-{}
+Sprite(Texture texture) : texture_(texture) {
+  clip_ = { 0, 0, texture_.getWidth(), texture_.getHeight() };
+}
+
+Sprite::
+Sprite(Texture texture, Vec2f pos) : Sprite(texture) {
+  pos_ = pos;
+}
+
+Sprite::
+Sprite(Texture texture, Vec2f pos, Rect clip) : Sprite(texture, pos) {
+  clip_ = clip;
+}
 
 void Sprite::
 draw() {
-  texture_.draw(static_cast<int>(x_), static_cast<int>(y_));
+  texture_.drawFrame(pos_, clip_);
 }

@@ -61,13 +61,44 @@ destroy() {
 
 void Texture::
 draw(int x, int y) const {
-  draw(x, y, width_, height_);
+  draw({ x, y, width_, height_ });
 }
 
 void Texture::
-draw(int x, int y, int w, int h) const {
+draw(Vec2 pos) const {
+  draw({ pos.x, pos.y, width_, height_ });
+}
+
+void Texture::
+draw(Rect dest) const {
   if (!texture_)
     return;
-  SDL_Rect dest { x, y, w, h};
-  SDL_RenderCopy(Game::getInstance().getRenderer(), texture_, nullptr, &dest);
+
+  SDL_RenderCopy(
+    Game::getInstance().getRenderer(), texture_,
+    nullptr, &dest
+  );
+}
+
+void Texture::
+drawFrame(int x, int y, Rect clip) const {
+  drawFrame({ x, y, clip.w, clip.h }, clip);
+}
+
+void Texture::
+drawFrame(Vec2 pos, Rect clip) const {
+  drawFrame({ pos.x, pos.y, clip.w, clip.h }, clip);
+}
+
+void Texture::
+drawFrame(Rect dest, Rect clip) const {
+  if (!texture_)
+    return;
+
+  SDL_RenderCopyEx(
+    Game::getInstance().getRenderer(),
+    texture_,
+    &clip, &dest,
+    0, nullptr, SDL_FLIP_NONE
+  );
 }

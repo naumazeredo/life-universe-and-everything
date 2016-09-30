@@ -7,6 +7,7 @@
 #include "util/types.h"
 #include "texturemanager.h"
 #include "fontmanager.h"
+#include "sprite.h"
 
 void Game::
 start(const std::string& name, int w, int h) {
@@ -45,10 +46,6 @@ Game::
 
 void Game::
 loop() {
-  Font font = fontManager_.loadFont(30);
-  Texture text;
-  text.loadFromText("Text", font);
-
   u32 lastTime = SDL_GetTicks();
 
   SDL_Event event;
@@ -61,7 +58,6 @@ loop() {
 
     SDL_RenderClear(renderer_);
     logic();
-    text.draw(10, 10);
     SDL_RenderPresent(renderer_);
 
     // Framelimit

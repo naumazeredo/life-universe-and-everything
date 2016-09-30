@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include "util/types.h"
 
 struct SDL_Texture;
 class TextureManager;
@@ -20,11 +21,15 @@ public:
   void destroy();
 
   void draw(int, int) const;
-  void draw(int, int, int, int) const;
-  //void drawFrame();
+  void draw(Vec2) const;
+  void draw(Rect) const;
+  void drawFrame(int, int, Rect) const;
+  void drawFrame(Vec2, Rect) const;
+  void drawFrame(Rect, Rect) const;
 
   inline int getWidth() const  { return width_; }
   inline int getHeight() const { return height_; }
+  inline Rect getClip() const  { return { 0, 0, width_, height_ }; }
 
 private:
   SDL_Texture* texture_ = nullptr;
