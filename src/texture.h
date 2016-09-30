@@ -15,6 +15,7 @@ class Texture {
 public:
   Texture() = default;
   Texture(const std::string&);
+  Texture(const std::string&, const Font&);
 
   void load(const std::string&);
   void loadFromText(const std::string&, const Font&);

@@ -13,6 +13,11 @@ Texture(const std::string& path) : Texture() {
   load(path);
 }
 
+Texture::
+Texture(const std::string& text, const Font& font) : Texture() {
+  loadFromText(text, font);
+}
+
 void Texture::
 load(const std::string& path) {
   destroy();
