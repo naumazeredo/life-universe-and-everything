@@ -45,7 +45,7 @@ Game::
 
 void Game::
 loop() {
-  Font font = fontManager_.loadFont(20);
+  Font font = fontManager_.loadFont(30);
   Texture text;
   text.loadFromText("Text", font);
 

@@ -17,7 +17,8 @@ Any help is welcome!
   - [x] Limit framerate
   - [x] Textures
   - [x] Sprites
-  - [ ] Text rendering
+  - [x] Text rendering
+    - [ ] Bitmap font
   - [ ] Buttons
   - [ ] Audio
   - [ ] Timer

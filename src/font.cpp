@@ -14,7 +14,7 @@ void Font::
 load(/*const std::string& path,*/ int size) {
   // TODO: error checking
   //font_ = TTF_OpenFont(path.c_str(), size);
-  font_ = TTF_OpenFont("assets/fonts/ProggySquare.ttf", size);
+  font_ = TTF_OpenFont("assets/fonts/Habbo.ttf", size);
 
   if (!font_) {
     // TODO: log error correctly
