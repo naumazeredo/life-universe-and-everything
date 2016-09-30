@@ -45,3 +45,8 @@ struct Rectf {
   operator Rect()     { return { (int)x, (int)y, (int)w, (int)h }; }
 };
 
+// Functions
+
+inline bool pointInsideRect(Vec2 p, Rect r) {
+  return (p.x >= r.x and p.x <= r.x+r.w and p.y >= r.y and p.y <= r.y+r.h);
+}

@@ -8,6 +8,7 @@
 #include "texturemanager.h"
 #include "fontmanager.h"
 #include "sprite.h"
+#include "button.h"
 
 void Game::
 start(const std::string& name, int w, int h) {
@@ -48,6 +49,9 @@ void Game::
 loop() {
   u32 lastTime = SDL_GetTicks();
 
+  int mouseX = 0, mouseY = 0;
+  u32 lastMouseState = 0;
+
   SDL_Event event;
   while (1) {
     while (SDL_PollEvent(&event)) {
@@ -56,16 +60,21 @@ loop() {
       }
     }
 
+    u32 mouseState = SDL_GetMouseState(&mouseX, &mouseY);
+
     SDL_RenderClear(renderer_);
     logic();
     SDL_RenderPresent(renderer_);
 
+    lastMouseState = mouseState;
+
     // Framelimit
     u32 currentTime = SDL_GetTicks();
     if (currentTime - lastTime < 1000 / 60) {
-      SDL_Delay(1000 / 60 - (currentTime - lastTime));
-      lastTime = currentTime;
+      auto delay = 1000 / 60 - (currentTime - lastTime);
+      SDL_Delay(delay);
     }
+    lastTime = currentTime;
   }
 }
 

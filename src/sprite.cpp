@@ -4,12 +4,8 @@
 #include "sprite.h"
 
 Sprite::
-Sprite(const std::string& path) {
+Sprite(const std::string& path, Vec2f size) {
   setTexture(path);
-}
-
-Sprite::
-Sprite(const std::string& path, Vec2f size) : Sprite(path) {
   size_ = size;
 }
 
@@ -19,12 +15,8 @@ Sprite(const std::string& path, Vec2f size, Rect clip) : Sprite(path, size) {
 }
 
 Sprite::
-Sprite(Texture texture) {
+Sprite(Texture texture, Vec2f size) {
   setTexture(texture);
-}
-
-Sprite::
-Sprite(Texture texture, Vec2f size) : Sprite(texture) {
   size_ = size;
 }
 
