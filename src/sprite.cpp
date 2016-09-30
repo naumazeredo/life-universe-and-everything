@@ -9,12 +9,12 @@ Sprite(const std::string& path) {
 }
 
 Sprite::
-Sprite(const std::string& path, Rectf dest) : Sprite(path) {
-  dest_ = dest;
+Sprite(const std::string& path, Vec2f size) : Sprite(path) {
+  size_ = size;
 }
 
 Sprite::
-Sprite(const std::string& path, Rectf dest, Rect clip) : Sprite(path, dest) {
+Sprite(const std::string& path, Vec2f size, Rect clip) : Sprite(path, size) {
   clip_ = clip;
 }
 
@@ -24,12 +24,12 @@ Sprite(Texture texture) {
 }
 
 Sprite::
-Sprite(Texture texture, Rectf dest) : Sprite(texture) {
-  dest_ = dest;
+Sprite(Texture texture, Vec2f size) : Sprite(texture) {
+  size_ = size;
 }
 
 Sprite::
-Sprite(Texture texture, Rectf dest, Rect clip) : Sprite(texture, dest) {
+Sprite(Texture texture, Vec2f size, Rect clip) : Sprite(texture, size) {
   clip_ = clip;
 }
 
@@ -40,6 +40,12 @@ setTexture(Texture texture) {
 }
 
 void Sprite::
-draw() {
-  texture_.drawClip(dest_, clip_);
+draw(int x, int y) {
+  Rect dest { x, y, static_cast<int>(size_.x), static_cast<int>(size_.y) };
+  texture_.drawClip(dest, clip_);
+}
+
+void Sprite::
+draw(Vec2 pos) {
+  draw(pos.x, pos.y);
 }
