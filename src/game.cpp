@@ -10,6 +10,7 @@
 #include "mouse.h"
 #include "sprite.h"
 #include "button.h"
+#include "shipbuilding.h"
 
 void Game::
 start(const std::string& name, int w, int h) {
@@ -70,6 +71,8 @@ drawRect(Rect rect) {
 
 void Game::
 loop() {
+  ShipBuilding shipBuilding;
+
   loadContent();
 
   u32 lastTime = SDL_GetTicks();
@@ -87,6 +90,7 @@ loop() {
     SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 0);
     SDL_RenderClear(renderer_);
     logic();
+    shipBuilding.draw();
     SDL_RenderPresent(renderer_);
 
     // Framelimit
