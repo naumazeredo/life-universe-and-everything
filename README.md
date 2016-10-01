@@ -10,16 +10,13 @@ Any help is welcome!
 
 # To-Do list
 
-- [ ] Utility
-  - [ ] Vec2 (?)
-  - [x] Inttypes
 - [ ] Engine
   - [x] Limit framerate
   - [x] Textures
   - [x] Sprites
   - [x] Text rendering
     - [ ] Bitmap font
-  - [ ] Buttons
+  - [x] Buttons
   - [ ] Audio
   - [ ] Timer
     - [ ] Game time
