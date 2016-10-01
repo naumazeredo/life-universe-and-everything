@@ -25,7 +25,7 @@ public:
   }
 
   void draw();
-  void update(int, int, bool);
+  void update();
 private:
   Vec2f pos_;
   Sprite sprite_;

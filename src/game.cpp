@@ -7,6 +7,7 @@
 #include "util/types.h"
 #include "texturemanager.h"
 #include "fontmanager.h"
+#include "mouse.h"
 #include "sprite.h"
 #include "button.h"
 
@@ -51,9 +52,6 @@ loop() {
 
   u32 lastTime = SDL_GetTicks();
 
-  int mouseX = 0, mouseY = 0;
-  u32 lastMouseState = 0;
-
   SDL_Event event;
   while (1) {
     while (SDL_PollEvent(&event)) {
@@ -62,13 +60,11 @@ loop() {
       }
     }
 
-    u32 mouseState = SDL_GetMouseState(&mouseX, &mouseY);
+    Mouse::update();
 
     SDL_RenderClear(renderer_);
     logic();
     SDL_RenderPresent(renderer_);
-
-    lastMouseState = mouseState;
 
     // Framelimit
     u32 currentTime = SDL_GetTicks();
