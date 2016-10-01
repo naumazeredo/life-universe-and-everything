@@ -13,7 +13,6 @@ Font(/*const std::string& path,*/ int size) {
 void Font::
 load(/*const std::string& path,*/ int size) {
   // TODO: error checking
-  //font_ = TTF_OpenFont(path.c_str(), size);
   font_ = TTF_OpenFont("assets/fonts/Habbo.ttf", size);
 
   if (!font_) {

@@ -4,6 +4,13 @@
 #include "sprite.h"
 
 Sprite::
+Sprite(const std::string& path) {
+  setTexture(path);
+  auto clip = texture_.getClip();
+  size_ = { static_cast<float>(clip.w), static_cast<float>(clip.h) };
+}
+
+Sprite::
 Sprite(const std::string& path, Vec2f size) {
   setTexture(path);
   size_ = size;
@@ -12,6 +19,13 @@ Sprite(const std::string& path, Vec2f size) {
 Sprite::
 Sprite(const std::string& path, Vec2f size, Rect clip) : Sprite(path, size) {
   clip_ = clip;
+}
+
+Sprite::
+Sprite(Texture texture) {
+  setTexture(texture);
+  auto clip = texture_.getClip();
+  size_ = { static_cast<float>(clip.w), static_cast<float>(clip.h) };
 }
 
 Sprite::
