@@ -10,8 +10,10 @@
 class Sprite {
 public:
   Sprite() = default;
+  Sprite(const std::string&);
   Sprite(const std::string&, Vec2f);
   Sprite(const std::string&, Vec2f, Rect);
+  Sprite(Texture);
   Sprite(Texture, Vec2f);
   Sprite(Texture, Vec2f, Rect);
 

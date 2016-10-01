@@ -47,6 +47,8 @@ Game::
 
 void Game::
 loop() {
+  loadContent();
+
   u32 lastTime = SDL_GetTicks();
 
   int mouseX = 0, mouseY = 0;
@@ -76,6 +78,10 @@ loop() {
     }
     lastTime = currentTime;
   }
+}
+
+void Game::
+loadContent() {
 }
 
 void Game::

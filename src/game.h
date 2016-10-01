@@ -26,17 +26,17 @@ public:
   }
 
   void start(const std::string&, int, int);
-  void loadContent();
-  void logic();
 
   //inline SDL_Window*   getWindow()   { return window_; }
   inline SDL_Renderer* getRenderer() { return renderer_; }
 
-private:
+protected:
   // Singleton private constructor
   Game();
 
   void loop();
+  void loadContent();
+  void logic();
 
   SDL_Window*     window_;
   SDL_Renderer*   renderer_;
