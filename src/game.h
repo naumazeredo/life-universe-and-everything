@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include "util/types.h"
 
 struct SDL_Window;
 struct SDL_Renderer;
@@ -27,8 +28,13 @@ public:
 
   void start(const std::string&, int, int);
 
-  //inline SDL_Window*   getWindow()   { return window_; }
-  inline SDL_Renderer* getRenderer() { return renderer_; }
+  //inline SDL_Window*   getWindow() const { return window_; }
+  inline SDL_Renderer* getRenderer() const { return renderer_; }
+  Vec2 getWindowSize() const;
+
+  void setDrawColor(Color);
+  void drawLine(Vec2, Vec2);
+  void drawRect(Rect);
 
 protected:
   // Singleton private constructor

@@ -46,6 +46,28 @@ Game::
   window_   = nullptr;
 }
 
+Vec2 Game::
+getWindowSize() const {
+  Vec2 size;
+  SDL_GetWindowSize(window_, &size.x, &size.y);
+  return size;
+}
+
+void Game::
+setDrawColor(Color color) {
+  SDL_SetRenderDrawColor(renderer_, color.r, color.g, color.b, color.a);
+}
+
+void Game::
+drawLine(Vec2 p1, Vec2 p2) {
+  SDL_RenderDrawLine(renderer_, p1.x, p1.y, p2.x, p2.y);
+}
+
+void Game::
+drawRect(Rect rect) {
+  SDL_RenderFillRect(renderer_, &rect);
+}
+
 void Game::
 loop() {
   loadContent();
@@ -62,6 +84,7 @@ loop() {
 
     Mouse::update();
 
+    SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 0);
     SDL_RenderClear(renderer_);
     logic();
     SDL_RenderPresent(renderer_);
