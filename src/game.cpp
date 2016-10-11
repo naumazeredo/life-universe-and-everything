@@ -87,6 +87,8 @@ loop() {
 
     Mouse::update();
 
+    shipBuilding.update();
+
     SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 0);
     SDL_RenderClear(renderer_);
     logic();

@@ -12,27 +12,22 @@
 
 class ShipBuilding {
 public:
-  enum class SystemType {
-    NONE, PILOTING, ENGINE, SHIELDS, WEAPONS
-  };
-
   void draw();
   void update();
 
 private:
   struct Room {
-    SystemType system;
+    u32 system;
     std::vector<std::pair<int, int>> tiles;
   };
 
   bool createRoom();
-  bool assignSystemToRoom(u32, SystemType);
+  bool assignSystemToRoom(u32, u32);
 
-  inline u32 getTileRoom(int x, int y) { return tiles_[x][y]; }
+  inline u32 getTileRoom(int x, int y) { return tiles_[y][x]; }
   void removeTileFromRoom(int, int, u32);
 
-  inline void selectTile(int x, int y) { selectedTiles_[x][y] = !selectedTiles_[x][y]; }
-
+  inline void selectTile(int x, int y) { selectedTiles_[y][x] = !selectedTiles_[y][x]; }
 
   u32 tiles_[SHIP_GRID_SIZE][SHIP_GRID_SIZE] = {};
   u32 roomCount_;
