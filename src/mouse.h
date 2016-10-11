@@ -13,10 +13,10 @@ public:
   static inline Vec2 getPosition()         { return pos_; }
   static inline Vec2 getRelativePosition() { return relativePos_; }
 
-  static inline bool getMouseDown(Button button)     { return state_ & button; }
-  static inline bool getMouseUp(Button button)       { return (!state_) & button; }
-  static inline bool getMousePressed(Button button)  { return relativeState_ & state_ & button; }
-  static inline bool getMouseReleased(Button button) { return relativeState_ & (!state_) & button; }
+  static inline bool getButtonDown(Button button)     { return state_ & button; }
+  static inline bool getButtonUp(Button button)       { return (!state_) & button; }
+  static inline bool getButtonPressed(Button button)  { return relativeState_ & state_ & button; }
+  static inline bool getButtonReleased(Button button) { return relativeState_ & (!state_) & button; }
 
   static void update() {
     Vec2 pos;
