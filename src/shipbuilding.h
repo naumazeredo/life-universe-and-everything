@@ -27,6 +27,7 @@ private:
 
   bool createRoom();
   bool assignSystemToRoom(u32, u32);
+  void drawRoom(u32);
 
   inline u32 getTileRoom(int x, int y) { return tiles_[y][x]; }
   void removeTileFromRoom(int, int, u32);
