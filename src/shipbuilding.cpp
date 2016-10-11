@@ -4,11 +4,17 @@
 #include "shipbuilding.h"
 
 #include <algorithm>
+#include <functional>
 #include "game.h"
 #include "mouse.h"
 
 bool ShipBuilding::
 createRoom() {
+  // Verify if selected tiles are connected
+  const auto cc = countConnectedComponents();
+  if (cc != 1)
+    return false;
+
   // Get tiles vector from selected grid
   std::vector<std::pair<int, int>> tiles;
 
@@ -68,6 +74,12 @@ removeTileFromRoom(int x, int y, u32 room) {
   // If room is empty, erase room
   if (tiles.empty())
     rooms_.erase(room);
+}
+
+// TODO: add callback if couldn't select
+void ShipBuilding::
+setTileSelection(int x, int y, bool select) {
+  selectedTiles_[y][x] = select;
 }
 
 void ShipBuilding::
@@ -153,14 +165,20 @@ update() {
     (TILE_SIZE + 1) * SHIP_GRID_SIZE
   };
 
-  if (pointInsideRect(mousePos, GRID_RECT) and
-      Mouse::getButtonPressed(Mouse::Button::LEFT)) {
-    Vec2 tileMouse = {
+  if (pointInsideRect(mousePos, GRID_RECT)) {
+    const Vec2 tileMouse = {
       (mousePos.x - GRID_RECT.x) / (TILE_SIZE + 1),
       (mousePos.y - GRID_RECT.y) / (TILE_SIZE + 1)
     };
 
-    selectTile(tileMouse.x, tileMouse.y);
+    // If mouse is pressed, alternate tile selection
+    if (Mouse::getButtonPressed(Mouse::Button::LEFT)) {
+      selectingTiles_ = not isTileSelected(tileMouse.x, tileMouse.y);
+    }
+
+    if (Mouse::getButtonDown(Mouse::Button::LEFT)) {
+      setTileSelection(tileMouse.x, tileMouse.y, selectingTiles_);
+    }
   }
 
   if (Mouse::getButtonPressed(Mouse::Button::RIGHT)) {
@@ -168,3 +186,38 @@ update() {
   }
 }
 
+
+int ShipBuilding::
+countConnectedComponents() {
+  int connectedComponents = 0;
+
+  // TODO: std::array!
+  bool visited[SHIP_GRID_SIZE][SHIP_GRID_SIZE] = {};
+  for (int y = 0; y < SHIP_GRID_SIZE; ++y) {
+    for (int x = 0; x < SHIP_GRID_SIZE; ++x) {
+      const auto tileActive = selectedTiles_[y][x] or tiles_[y][x];
+      if (!visited[y][x] and tileActive) {
+        // Flood Fill
+        std::function<void(int, int)> ff = [&](int y, int x) {
+          if (visited[y][x] or
+              y < 0 or y >= SHIP_GRID_SIZE or
+              x < 0 or x >= SHIP_GRID_SIZE)
+            return;
+          visited[y][x] = 1;
+
+          if (selectedTiles_[y][x] or tiles_[y][x]) {
+            ff(y-1, x);
+            ff(y+1, x);
+            ff(y, x-1);
+            ff(y, x+1);
+          }
+        };
+        ff(y, x);
+
+        connectedComponents++;
+      }
+    }
+  }
+
+  return connectedComponents;
+}
