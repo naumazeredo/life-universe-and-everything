@@ -26,6 +26,8 @@ start(const std::string& name, int w, int h) {
 
   renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
 
+  SDL_SetRenderDrawBlendMode(renderer_, SDL_BLENDMODE_BLEND);
+
   // Run game
   loop();
 }
