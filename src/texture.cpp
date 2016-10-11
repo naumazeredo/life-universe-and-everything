@@ -31,7 +31,7 @@ load(const std::string& path) {
     return;
   }
 
-  texture_ = SDL_CreateTextureFromSurface(Game::getInstance().getRenderer(), surface);
+  texture_ = SDL_CreateTextureFromSurface(Game::getRenderer(), surface);
   width_   = surface->w;
   height_  = surface->h;
 
@@ -51,7 +51,7 @@ loadFromText(const std::string& text, const Font& font) {
     return;
   }
 
-  texture_ = SDL_CreateTextureFromSurface(Game::getInstance().getRenderer(), surface);
+  texture_ = SDL_CreateTextureFromSurface(Game::getRenderer(), surface);
   width_   = surface->w;
   height_  = surface->h;
 
@@ -81,7 +81,7 @@ draw(Rect dest) const {
 
   SDL_Rect drect = dest;
   SDL_RenderCopy(
-    Game::getInstance().getRenderer(), texture_,
+    Game::getRenderer(), texture_,
     nullptr, &drect
   );
 }
@@ -103,7 +103,7 @@ drawClip(Rect dest, Rect clip) const {
 
   SDL_Rect drect = dest, crect = clip;
   SDL_RenderCopyEx(
-    Game::getInstance().getRenderer(),
+    Game::getRenderer(),
     texture_,
     &crect, &drect,
     0, nullptr, SDL_FLIP_NONE

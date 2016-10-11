@@ -8,7 +8,6 @@
 #include "util/types.h"
 
 struct SDL_Texture;
-class TextureManager;
 class Font;
 
 class Texture {

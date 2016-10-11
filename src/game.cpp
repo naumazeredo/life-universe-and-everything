@@ -10,7 +10,20 @@
 #include "sprite.h"
 #include "button.h"
 
-void Game::
+namespace Game {
+
+namespace {
+  void loadContent();
+  void logic();
+
+  SDL_Window*   window_   = nullptr;
+  SDL_Renderer* renderer_ = nullptr;
+}
+
+//SDL_Window*   getWindow()   { return window_; }
+SDL_Renderer* getRenderer() { return renderer_; }
+
+void
 start(const std::string& name, int w, int h) {
   // TODO: error checking
   SDL_Init(SDL_INIT_VIDEO);
@@ -23,20 +36,10 @@ start(const std::string& name, int w, int h) {
   );
 
   renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
-
-  // Run game
-  loop();
 }
 
-Game::
-Game() :
-    window_(nullptr), renderer_(nullptr),
-    textureManager_(TextureManager::getInstance()),
-    fontManager_(FontManager::getInstance())
-{}
-
-Game::
-~Game() {
+void
+destroy() {
   SDL_DestroyRenderer(renderer_);
   SDL_DestroyWindow(window_);
   SDL_Quit();
@@ -45,14 +48,11 @@ Game::
   window_   = nullptr;
 }
 
-void Game::
-loop() {
+void
+run() {
   loadContent();
 
   u32 lastTime = SDL_GetTicks();
-
-  int mouseX = 0, mouseY = 0;
-  u32 lastMouseState = 0;
 
   SDL_Event event;
   while (1) {
@@ -62,13 +62,9 @@ loop() {
       }
     }
 
-    u32 mouseState = SDL_GetMouseState(&mouseX, &mouseY);
-
     SDL_RenderClear(renderer_);
     logic();
     SDL_RenderPresent(renderer_);
-
-    lastMouseState = mouseState;
 
     // Framelimit
     u32 currentTime = SDL_GetTicks();
@@ -80,11 +76,16 @@ loop() {
   }
 }
 
-void Game::
+namespace {
+
+void
 loadContent() {
 }
 
-void Game::
+void
 logic() {
 }
 
+}
+
+}

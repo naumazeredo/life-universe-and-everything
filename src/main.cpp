@@ -6,8 +6,9 @@
 const std::string title = "Life, the Universe and Everything";
 
 int main() {
-  Game& game = Game::getInstance();
-  game.start(title, 800, 600);
+  Game::start(title, 800, 600);
+  Game::run();
+  Game::destroy();
 
   return 0;
 }
