@@ -11,7 +11,10 @@ struct SDL_Renderer;
 
 namespace Game {
 
-void run(const std::string&, int, int);
+void start(const std::string&, int, int);
+void destroy();
+
+void run();
 
 // TODO: don't pass these pointers!
 //SDL_Window*   getWindow();

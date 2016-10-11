@@ -13,7 +13,6 @@
 namespace Game {
 
 namespace {
-  void loop();
   void loadContent();
   void logic();
 
@@ -25,7 +24,7 @@ namespace {
 SDL_Renderer* getRenderer() { return renderer_; }
 
 void
-run(const std::string& name, int w, int h) {
+start(const std::string& name, int w, int h) {
   // TODO: error checking
   SDL_Init(SDL_INIT_VIDEO);
 
@@ -37,11 +36,10 @@ run(const std::string& name, int w, int h) {
   );
 
   renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
+}
 
-  // Run game
-  loop();
-
-  // Destroy
+void
+destroy() {
   SDL_DestroyRenderer(renderer_);
   SDL_DestroyWindow(window_);
   SDL_Quit();
@@ -50,10 +48,8 @@ run(const std::string& name, int w, int h) {
   window_   = nullptr;
 }
 
-namespace {
-
 void
-loop() {
+run() {
   loadContent();
 
   u32 lastTime = SDL_GetTicks();
@@ -79,6 +75,8 @@ loop() {
     lastTime = currentTime;
   }
 }
+
+namespace {
 
 void
 loadContent() {
