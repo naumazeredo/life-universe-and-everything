@@ -6,27 +6,13 @@
 #include <map>
 #include "font.h"
 
-class FontManager {
-public:
-  ~FontManager();
+namespace FontManager {
 
-  // Singleton non-copy
-  FontManager(const FontManager&) = delete;
-  FontManager& operator=(const FontManager&) = delete;
+void start();
+void destroy();
 
-  // Singleton instance
-  inline static FontManager& getInstance() {
-    static FontManager instance;
-    return instance;
-  }
+// TODO: Allow another font paths
+Font loadFont(/*const std::string&,*/ int);
+void destroyAllFonts();
 
-  // TODO: Allow another font paths
-  Font loadFont(/*const std::string&,*/ int);
-  void destroyAllFonts();
-
-private:
-  // Singleton private constructor
-  FontManager();
-
-  std::map<int, Font> fonts_;
 };
