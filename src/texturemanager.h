@@ -12,26 +12,10 @@
 
 struct SDL_Texture;
 
-class TextureManager {
-public:
-  ~TextureManager();
+namespace TextureManager {
+void start();
+void destroy();
 
-  // Singleton non-copy
-  TextureManager(const TextureManager&) = delete;
-  TextureManager& operator=(const TextureManager&) = delete;
-
-  // Singleton instance
-  inline static TextureManager& getInstance() {
-    static TextureManager instance;
-    return instance;
-  }
-
-  Texture loadTexture(const std::string&);
-  void destroyAllTextures();
-
-private:
-  // Singleton private constructor
-  TextureManager();
-
-  std::map<std::string, Texture> textures_;
+Texture loadTexture(const std::string&);
+void destroyAllTextures();
 };
