@@ -8,16 +8,16 @@
 
 namespace Mouse {
 
-enum Button { LEFT = 0x01, MIDDLE = 0x02, RIGHT = 0x04, X1 = 0x08, X2 = 0x10 }; 
+enum Button { LEFT = 0x01, MIDDLE = 0x02, RIGHT = 0x04, X1 = 0x08, X2 = 0x10 };
 
 Vec2 getPosition();
 Vec2 getRelativePosition();
 
-bool getButtonDown(Button button);
-bool getButtonUp(Button button);
-bool getButtonPressed(Button button);
-bool getButtonReleased(Button button);
+bool isButtonDown(Button);
+bool isButtonUp(Button);
+bool isButtonPressed(Button);
+bool isButtonReleased(Button);
 
 void update();
 
-};
+}

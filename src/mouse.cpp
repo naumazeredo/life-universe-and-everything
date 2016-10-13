@@ -7,29 +7,29 @@ namespace Mouse {
 
 // Internals
 namespace {
-Vec2 pos_           { 0, 0 },
-     relativePos_   { 0, 0 };
-u32  state_         { 0 },
-     relativeState_ { 0 };
+Vec2 pos           { 0, 0 },
+     relativePos   { 0, 0 };
+u32  state         { 0 },
+     relativeState { 0 };
 }
 
-Vec2 getPosition()         { return pos_; }
-Vec2 getRelativePosition() { return relativePos_; }
+Vec2 getPosition()         { return pos; }
+Vec2 getRelativePosition() { return relativePos; }
 
-bool getButtonDown(Button button)     { return state_ & button; }
-bool getButtonUp(Button button)       { return (!state_) & button; }
-bool getButtonPressed(Button button)  { return relativeState_ & state_ & button; }
-bool getButtonReleased(Button button) { return relativeState_ & (!state_) & button; }
+bool isButtonDown(Button button)     { return state & button; }
+bool isButtonUp(Button button)       { return (!state) & button; }
+bool isButtonPressed(Button button)  { return relativeState & state & button; }
+bool isButtonReleased(Button button) { return relativeState & (!state) & button; }
 
 void update() {
-  Vec2 pos;
-  u32 state      = SDL_GetMouseState(&pos.x, &pos.y);
+  Vec2 newPos;
+  u32 newState = SDL_GetMouseState(&newPos.x, &newPos.y);
 
-  relativePos_ = { pos.x - pos_.x, pos.y - pos_.y };
-  pos_ = pos;
+  relativePos = { newPos.x - pos.x, newPos.y - pos.y };
+  pos = newPos;
 
-  relativeState_ = state_ ^ state;
-  state_         = state;
+  relativeState = newState ^ state;
+  state         = newState;
 }
 
 }
