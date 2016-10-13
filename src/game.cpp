@@ -8,6 +8,7 @@
 #include "texturemanager.h"
 #include "fontmanager.h"
 #include "mouse.h"
+#include "keyboard.h"
 #include "sprite.h"
 #include "button.h"
 #include "shipbuilding.h"
@@ -87,6 +88,7 @@ loop() {
       }
     }
 
+    Keyboard::update();
     Mouse::update();
 
     shipBuilding.update();
