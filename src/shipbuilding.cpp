@@ -7,6 +7,7 @@
 #include <functional>
 #include "game.h"
 #include "mouse.h"
+#include "keyboard.h"
 
 bool ShipBuilding::
 createRoom() {
@@ -234,17 +235,16 @@ update() {
       (mousePos.y - GRID_RECT.y) / TILE_SIZE
     };
 
-    // If mouse is pressed, alternate tile selection
-    if (Mouse::getButtonPressed(Mouse::Button::LEFT)) {
-      selectingTiles_ = not isTileSelected(tileMouse.x, tileMouse.y);
+    if (Mouse::isButtonDown(Mouse::Left)) {
+      setTileSelection(tileMouse.x, tileMouse.y, true);
     }
 
-    if (Mouse::getButtonDown(Mouse::Button::LEFT)) {
-      setTileSelection(tileMouse.x, tileMouse.y, selectingTiles_);
+    if (Mouse::isButtonDown(Mouse::Right)) {
+      setTileSelection(tileMouse.x, tileMouse.y, false);
     }
   }
 
-  if (Mouse::getButtonPressed(Mouse::Button::RIGHT)) {
+  if (Keyboard::isKeyDown(Keyboard::Space)) {
     createRoom();
   }
 }

@@ -16,7 +16,6 @@ typedef std::array<std::array<u32, SHIP_GRID_SIZE>, SHIP_GRID_SIZE> ShipGrid;
 
 class ShipBuilding {
 public:
-  ShipBuilding() : tiles_{}, selectedTiles_{} {}
   void draw();
   void update();
 
@@ -40,9 +39,8 @@ private:
   int countConnectedComponents(const ShipGrid&);
 
   // TODO: use std array
-  ShipGrid tiles_,
-           selectedTiles_;
-  bool selectingTiles_;
+  ShipGrid tiles_         = {},
+           selectedTiles_ = {};
 
   // TODO: do this better!
   u32 roomCount_;

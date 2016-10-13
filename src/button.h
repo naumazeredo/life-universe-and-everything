@@ -16,13 +16,10 @@ public:
   Button(Vec2f, Sprite);
   Button(Vec2f, Sprite, ButtonCallback);
 
-  inline Vec2f getPos() const { return pos_; }
-
-  inline void setPos(Vec2f pos)          { pos_ = pos; }
+  inline Vec2f getPos() const          { return pos_; }
+  inline void setPos(Vec2f pos)        { pos_ = pos; }
   inline void setSprite(Sprite sprite) { sprite_ = sprite; }
-  inline void setMouseClickCallback(ButtonCallback callback) {
-    onMouseClick_ = callback;
-  }
+  inline void setMouseClickCallback(ButtonCallback callback) { onMouseClick_ = callback; }
 
   void draw();
   void update();

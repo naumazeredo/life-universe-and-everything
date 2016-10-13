@@ -27,7 +27,7 @@ update() {
   auto size = sprite_.getSize();
   Rectf rect = { pos_.x, pos_.y, size.x, size.y };
   if (pointInsideRect(Mouse::getPosition(), rect) and
-      Mouse::isButtonPressed(Mouse::Button::LEFT)) {
+      Mouse::isButtonPressed(Mouse::Left)) {
     onMouseClick_(*this);
   }
 }

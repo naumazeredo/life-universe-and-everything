@@ -8,7 +8,13 @@
 
 namespace Mouse {
 
-enum Button { LEFT = 0x01, MIDDLE = 0x02, RIGHT = 0x04, X1 = 0x08, X2 = 0x10 };
+enum Button {
+  Left   = 0x01,
+  Middle = 0x02,
+  Right  = 0x04,
+  X1     = 0x08,
+  X2     = 0x10
+};
 
 Vec2 getPosition();
 Vec2 getRelativePosition();
