@@ -11,8 +11,16 @@
 bool ShipBuilding::
 createRoom() {
   // Verify if selected tiles are connected
-  const auto cc = countConnectedComponents();
-  if (cc != 1)
+  auto merge = [](const ShipGrid& a, const ShipGrid& b) {
+    ShipGrid r = a;
+    for (u32 i = 0; i < a.size(); ++i)
+      for (u32 j = 0; j < a[i].size(); ++j)
+        r[i][j] += b[i][j];
+    return r;
+  };
+
+  if (countConnectedComponents(selectedTiles_) != 1 or
+      countConnectedComponents(merge(tiles_, selectedTiles_)) != 1)
     return false;
 
   // Get tiles vector from selected grid
@@ -165,6 +173,14 @@ draw() {
   game.setDrawColor({ 64, 64, 64, 255 });
   game.drawRect(GRID_RECT);
 
+  game.setDrawColor({ 48, 48, 48, 255 });
+  for (int i = 0; i < SHIP_GRID_SIZE; ++i) {
+    int y = i * TILE_SIZE + GRID_RECT.y-1,
+        x = i * TILE_SIZE + GRID_RECT.x-1;
+    game.drawLine({ GRID_RECT.x, y }, { GRID_RECT.x + GRID_RECT.w - 1, y });
+    game.drawLine({ x, GRID_RECT.y }, { x, GRID_RECT.y + GRID_RECT.h - 1 });
+  }
+
   // Rooms
   for (auto room : rooms_)
     drawRoom(room.first);
@@ -235,32 +251,33 @@ update() {
 
 
 int ShipBuilding::
-countConnectedComponents() {
+countConnectedComponents(const ShipGrid& tiles) {
   int connectedComponents = 0;
 
   // TODO: std::array!
-  bool visited[SHIP_GRID_SIZE][SHIP_GRID_SIZE] = {};
+  ShipGrid visited {};
+
+  std::function<void(int, int)> floodfill = [&](int y, int x) {
+    if (visited[y][x] or
+        y < 0 or y >= SHIP_GRID_SIZE or
+        x < 0 or x >= SHIP_GRID_SIZE)
+      return;
+    visited[y][x] = 1;
+
+    if (tiles[y][x]) {
+      floodfill(y-1, x);
+      floodfill(y+1, x);
+      floodfill(y, x-1);
+      floodfill(y, x+1);
+    }
+  };
+
   for (int y = 0; y < SHIP_GRID_SIZE; ++y) {
     for (int x = 0; x < SHIP_GRID_SIZE; ++x) {
-      const auto tileActive = selectedTiles_[y][x] or tiles_[y][x];
+      const auto tileActive = tiles[y][x];
       if (!visited[y][x] and tileActive) {
         // Flood Fill
-        std::function<void(int, int)> ff = [&](int y, int x) {
-          if (visited[y][x] or
-              y < 0 or y >= SHIP_GRID_SIZE or
-              x < 0 or x >= SHIP_GRID_SIZE)
-            return;
-          visited[y][x] = 1;
-
-          if (selectedTiles_[y][x] or tiles_[y][x]) {
-            ff(y-1, x);
-            ff(y+1, x);
-            ff(y, x-1);
-            ff(y, x+1);
-          }
-        };
-        ff(y, x);
-
+        floodfill(y, x);
         connectedComponents++;
       }
     }

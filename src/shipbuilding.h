@@ -11,7 +11,8 @@
 
 // TODO: don't use define for constant!
 #define SHIP_GRID_SIZE 32
-//typedef std::array<std::array<u32, 32>, 32> ShipGrid;
+
+typedef std::array<std::array<u32, SHIP_GRID_SIZE>, SHIP_GRID_SIZE> ShipGrid;
 
 class ShipBuilding {
 public:
@@ -36,11 +37,11 @@ private:
 
   inline bool isTileSelected(int x, int y) const { return selectedTiles_[y][x]; }
 
-  int countConnectedComponents();
+  int countConnectedComponents(const ShipGrid&);
 
   // TODO: use std array
-  u32 tiles_[SHIP_GRID_SIZE][SHIP_GRID_SIZE] = {};
-  bool selectedTiles_[SHIP_GRID_SIZE][SHIP_GRID_SIZE] = {};
+  ShipGrid tiles_,
+           selectedTiles_;
   bool selectingTiles_;
 
   // TODO: do this better!
