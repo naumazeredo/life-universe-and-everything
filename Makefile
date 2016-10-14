@@ -15,14 +15,14 @@ EXE=bin/lue.out
 
 all: $(EXE)
 
-$(EXE): $(OBJS) | version
+$(EXE): $(OBJS)
 	@mkdir -p bin
 	$(CC) $^ $(FLAGS) $(LD_FLAGS) -o $@
 
 obj:
 	@mkdir -p obj
 
-obj/%.o: src/%.cpp | obj
+obj/%.o: src/%.cpp | obj version
 	$(CC) $< $(FLAGS) $(CC_FLAGS) -c -o $@
 
 run: $(EXE)
