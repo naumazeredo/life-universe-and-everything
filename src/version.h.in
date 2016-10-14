@@ -1,0 +1,6 @@
+/**
+  version.h
+  */
+#pragma once
+#include <string>
+const std::string VERSION = "@VERSION@";
