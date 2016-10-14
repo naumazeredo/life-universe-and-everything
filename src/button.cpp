@@ -3,6 +3,8 @@
  */
 #include "button.h"
 
+#include "mouse.h"
+
 Button::
 Button(Vec2f pos, Sprite sprite) :
     pos_(pos), sprite_(sprite)
@@ -21,10 +23,11 @@ draw() {
 }
 
 void Button::
-update(int mouseX, int mouseY, bool mouseClick) {
+update() {
   auto size = sprite_.getSize();
   Rectf rect = { pos_.x, pos_.y, size.x, size.y };
-  if (pointInsideRect({ mouseX, mouseY }, rect) and mouseClick) {
+  if (pointInsideRect(Mouse::getPosition(), rect) and
+      Mouse::isButtonPressed(Mouse::Left)) {
     onMouseClick_(*this);
   }
 }

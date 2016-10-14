@@ -7,14 +7,17 @@
 #include "util/types.h"
 #include "texturemanager.h"
 #include "fontmanager.h"
+#include "mouse.h"
+#include "keyboard.h"
 #include "sprite.h"
 #include "button.h"
+#include "shipbuilding.h"
 
 namespace Game {
 
 namespace {
-  void loadContent();
-  void logic();
+  void loadContent() {}
+  void logic() {}
 
   SDL_Window*   window_   = nullptr;
   SDL_Renderer* renderer_ = nullptr;
@@ -36,6 +39,8 @@ start(const std::string& name, int w, int h) {
   );
 
   renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
+
+  SDL_SetRenderDrawBlendMode(renderer_, SDL_BLENDMODE_BLEND);
 }
 
 void
@@ -50,6 +55,8 @@ destroy() {
 
 void
 run() {
+  ShipBuilding shipBuilding;
+
   loadContent();
 
   u32 lastTime = SDL_GetTicks();
@@ -62,8 +69,15 @@ run() {
       }
     }
 
+    Keyboard::update();
+    Mouse::update();
+
+    shipBuilding.update();
+
+    SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 0);
     SDL_RenderClear(renderer_);
     logic();
+    shipBuilding.draw();
     SDL_RenderPresent(renderer_);
 
     // Framelimit
@@ -76,16 +90,26 @@ run() {
   }
 }
 
-namespace {
-
-void
-loadContent() {
+Vec2
+getWindowSize() {
+  Vec2 size;
+  SDL_GetWindowSize(window_, &size.x, &size.y);
+  return size;
 }
 
 void
-logic() {
+setDrawColor(Color color) {
+  SDL_SetRenderDrawColor(renderer_, color.r, color.g, color.b, color.a);
 }
 
+void
+drawLine(Vec2 p1, Vec2 p2) {
+  SDL_RenderDrawLine(renderer_, p1.x, p1.y, p2.x, p2.y);
+}
+
+void
+drawRect(Rect rect) {
+  SDL_RenderFillRect(renderer_, &rect);
 }
 
 }
