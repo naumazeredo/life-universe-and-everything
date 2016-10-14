@@ -33,4 +33,4 @@ version:
 		($(VERSION_CMD) > $(VERSION_H) ; echo "version updated to "$(VERSION))
 
 clean:
-	@rm -r bin obj
+	@rm -rf bin obj
