@@ -55,8 +55,6 @@ destroy() {
 
 void
 run() {
-  ShipBuilding shipBuilding;
-
   loadContent();
 
   u32 lastTime = SDL_GetTicks();
@@ -72,12 +70,12 @@ run() {
     Keyboard::update();
     Mouse::update();
 
-    shipBuilding.update();
+    ShipBuilding::update();
 
     SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 0);
     SDL_RenderClear(renderer_);
     logic();
-    shipBuilding.draw();
+    ShipBuilding::draw();
     SDL_RenderPresent(renderer_);
 
     // Framelimit

@@ -3,13 +3,47 @@
  */
 #include "shipbuilding.h"
 
+#include <unordered_map>
+#include <vector>
+#include <array>
 #include <algorithm>
 #include <functional>
+#include "util/types.h"
 #include "game.h"
 #include "mouse.h"
 #include "keyboard.h"
 
-bool ShipBuilding::
+namespace ShipBuilding {
+
+const i32 SHIP_GRID_SIZE = 32;
+typedef std::array<std::array<u32, SHIP_GRID_SIZE>, SHIP_GRID_SIZE> ShipGrid;
+
+// Internals
+namespace {
+
+struct Room {
+  u32 system;
+  std::vector<std::pair<int, int>> tiles;
+};
+
+ShipGrid tiles_         = {},
+         selectedTiles_ = {};
+
+// TODO: Do this better!
+u32 roomCount_;
+std::unordered_map<u32, Room> rooms_;
+
+bool createRoom();
+bool assignSystemToRoom(u32, u32);
+void drawRoom(u32);
+void removeTileFromRoom(int, int, u32);
+void setTileSelection(int, int, bool);
+int countConnectedComponents(const ShipGrid&);
+
+u32 getTileRoom(int x, int y) { return tiles_[y][x]; }
+bool isTileSelected(int x, int y) { return selectedTiles_[y][x]; }
+
+bool
 createRoom() {
   // Verify if selected tiles are connected
   auto merge = [](const ShipGrid& a, const ShipGrid& b) {
@@ -63,7 +97,7 @@ createRoom() {
   return true;
 }
 
-bool ShipBuilding::
+bool
 assignSystemToRoom(u32 room, u32 system) {
   if (room == 0 or room >= roomCount_)
     return false;
@@ -72,7 +106,7 @@ assignSystemToRoom(u32 room, u32 system) {
   return true;
 }
 
-void ShipBuilding::
+void
 drawRoom(u32 room) {
   Game::setDrawColor({ 224, 224, 224, 255 });
 
@@ -134,7 +168,7 @@ drawRoom(u32 room) {
   drawBorder(false);
 }
 
-void ShipBuilding::
+void
 removeTileFromRoom(int x, int y, u32 room) {
   if (room == 0 or room >= roomCount_ or rooms_.find(room) == rooms_.end())
     return;
@@ -149,12 +183,50 @@ removeTileFromRoom(int x, int y, u32 room) {
 }
 
 // TODO: add callback if couldn't select
-void ShipBuilding::
+void
 setTileSelection(int x, int y, bool select) {
   selectedTiles_[y][x] = select;
 }
 
-void ShipBuilding::
+int
+countConnectedComponents(const ShipGrid& tiles) {
+  int connectedComponents = 0;
+
+  // TODO: std::array!
+  ShipGrid visited {};
+
+  std::function<void(int, int)> floodfill = [&](int y, int x) {
+    if (visited[y][x] or
+        y < 0 or y >= SHIP_GRID_SIZE or
+        x < 0 or x >= SHIP_GRID_SIZE)
+      return;
+    visited[y][x] = 1;
+
+    if (tiles[y][x]) {
+      floodfill(y-1, x);
+      floodfill(y+1, x);
+      floodfill(y, x-1);
+      floodfill(y, x+1);
+    }
+  };
+
+  for (int y = 0; y < SHIP_GRID_SIZE; ++y) {
+    for (int x = 0; x < SHIP_GRID_SIZE; ++x) {
+      const auto tileActive = tiles[y][x];
+      if (!visited[y][x] and tileActive) {
+        // Flood Fill
+        floodfill(y, x);
+        connectedComponents++;
+      }
+    }
+  }
+
+  return connectedComponents;
+}
+
+}
+
+void
 draw() {
   const Vec2 mousePos = Mouse::getPosition();
 
@@ -211,7 +283,7 @@ draw() {
   }
 }
 
-void ShipBuilding::
+void
 update() {
   const Vec2 mousePos = Mouse::getPosition();
 
@@ -246,39 +318,4 @@ update() {
   }
 }
 
-
-int ShipBuilding::
-countConnectedComponents(const ShipGrid& tiles) {
-  int connectedComponents = 0;
-
-  // TODO: std::array!
-  ShipGrid visited {};
-
-  std::function<void(int, int)> floodfill = [&](int y, int x) {
-    if (visited[y][x] or
-        y < 0 or y >= SHIP_GRID_SIZE or
-        x < 0 or x >= SHIP_GRID_SIZE)
-      return;
-    visited[y][x] = 1;
-
-    if (tiles[y][x]) {
-      floodfill(y-1, x);
-      floodfill(y+1, x);
-      floodfill(y, x-1);
-      floodfill(y, x+1);
-    }
-  };
-
-  for (int y = 0; y < SHIP_GRID_SIZE; ++y) {
-    for (int x = 0; x < SHIP_GRID_SIZE; ++x) {
-      const auto tileActive = tiles[y][x];
-      if (!visited[y][x] and tileActive) {
-        // Flood Fill
-        floodfill(y, x);
-        connectedComponents++;
-      }
-    }
-  }
-
-  return connectedComponents;
 }
