@@ -15,6 +15,7 @@
 
 namespace ShipBuilding {
 
+const i32 TILE_SIZE      = 18;
 const i32 SHIP_GRID_SIZE = 32;
 typedef std::array<std::array<u32, SHIP_GRID_SIZE>, SHIP_GRID_SIZE> ShipGrid;
 
@@ -111,14 +112,13 @@ drawRoom(u32 room) {
   Game::setDrawColor({ 224, 224, 224, 255 });
 
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
-  const int TILE_SIZE = 18;
-
   const Rect GRID_RECT = {
     WINDOW_SIZE.x / 2 - TILE_SIZE * SHIP_GRID_SIZE / 2,
     WINDOW_SIZE.y / 2 - TILE_SIZE * SHIP_GRID_SIZE / 2,
     TILE_SIZE * SHIP_GRID_SIZE,
     TILE_SIZE * SHIP_GRID_SIZE
   };
+
 
   const auto& tiles = rooms_[room].tiles;
   auto findTile = [&](int y, int x) {
@@ -231,8 +231,6 @@ draw() {
   const Vec2 mousePos = Mouse::getPosition();
 
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
-  const int TILE_SIZE = 18;
-
   const Rect GRID_RECT = {
     WINDOW_SIZE.x / 2 - TILE_SIZE * SHIP_GRID_SIZE / 2,
     WINDOW_SIZE.y / 2 - TILE_SIZE * SHIP_GRID_SIZE / 2,
@@ -245,11 +243,11 @@ draw() {
   Game::drawRect(GRID_RECT);
 
   Game::setDrawColor({ 48, 48, 48, 255 });
-  for (int i = 0; i < SHIP_GRID_SIZE; ++i) {
+  for (int i = 0; i <= SHIP_GRID_SIZE; ++i) {
     int y = i * TILE_SIZE + GRID_RECT.y-1,
         x = i * TILE_SIZE + GRID_RECT.x-1;
-    Game::drawLine({ GRID_RECT.x, y }, { GRID_RECT.x + GRID_RECT.w - 1, y });
-    Game::drawLine({ x, GRID_RECT.y }, { x, GRID_RECT.y + GRID_RECT.h - 1 });
+    Game::drawLine({ GRID_RECT.x - 1, y }, { GRID_RECT.x + GRID_RECT.w - 1, y });
+    Game::drawLine({ x, GRID_RECT.y - 1 }, { x, GRID_RECT.y + GRID_RECT.h - 1 });
   }
 
   // Rooms
@@ -287,10 +285,7 @@ void
 update() {
   const Vec2 mousePos = Mouse::getPosition();
 
-  // TODO: declare these const "more globally"
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
-  const int TILE_SIZE = 18;
-
   const Rect GRID_RECT = {
     WINDOW_SIZE.x / 2 - TILE_SIZE * SHIP_GRID_SIZE / 2,
     WINDOW_SIZE.y / 2 - TILE_SIZE * SHIP_GRID_SIZE / 2,
