@@ -33,7 +33,7 @@ loadTexture(const std::string& path) {
     return it->second;
   }
 
-  textures_.emplace(path, path);
+  textures_.emplace(path, Texture { path });
   return textures_[path];
 }
 

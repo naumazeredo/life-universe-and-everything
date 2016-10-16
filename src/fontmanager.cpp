@@ -33,7 +33,7 @@ loadFont(/*const std::string& path,*/ int size) {
     return font->second;
   }
 
-  fonts_.emplace(size, size);
+  fonts_.emplace(size, Font { size });
   return fonts_[size];
 }
 
