@@ -9,7 +9,9 @@ namespace TextureManager {
 
 // Internals
 namespace {
+
 std::map<std::string, Texture> textures_;
+
 }
 
 void
