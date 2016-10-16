@@ -9,15 +9,12 @@
 #include <algorithm>
 #include <functional>
 #include "util/types.h"
+#include "shiplayout.h"
 #include "game.h"
 #include "mouse.h"
 #include "keyboard.h"
 
 namespace ShipBuilding {
-
-const i32 TILE_SIZE      = 18;
-const i32 SHIP_GRID_SIZE = 32;
-typedef std::array<std::array<u32, SHIP_GRID_SIZE>, SHIP_GRID_SIZE> ShipGrid;
 
 // Internals
 namespace {
@@ -27,8 +24,8 @@ struct Room {
   std::vector<std::pair<int, int>> tiles;
 };
 
-ShipGrid tiles_         = {},
-         selectedTiles_ = {};
+ShipLayout::ShipGrid tiles_         = {};
+ShipLayout::ShipGrid selectedTiles_ = {};
 
 // TODO: Do this better!
 u32 roomCount_;
@@ -39,7 +36,7 @@ bool assignSystemToRoom(u32, u32);
 void drawRoom(u32);
 void removeTileFromRoom(int, int, u32);
 void setTileSelection(int, int, bool);
-int countConnectedComponents(const ShipGrid&);
+int countConnectedComponents(const ShipLayout::ShipGrid&);
 
 u32 getTileRoom(int x, int y) { return tiles_[y][x]; }
 bool isTileSelected(int x, int y) { return selectedTiles_[y][x]; }
@@ -47,8 +44,9 @@ bool isTileSelected(int x, int y) { return selectedTiles_[y][x]; }
 bool
 createRoom() {
   // Verify if selected tiles are connected
-  auto merge = [](const ShipGrid& a, const ShipGrid& b) {
-    ShipGrid r = a;
+  // TODO: use C++14 to auto in lambda parameters
+  auto merge = [](const ShipLayout::ShipGrid& a, const ShipLayout::ShipGrid& b) {
+    auto r = a;
     for (u32 i = 0; i < a.size(); ++i)
       for (u32 j = 0; j < a[i].size(); ++j)
         r[i][j] += b[i][j];
@@ -62,8 +60,8 @@ createRoom() {
   // Get tiles vector from selected grid
   std::vector<std::pair<int, int>> tiles;
 
-  for (int y = 0; y < SHIP_GRID_SIZE; ++y)
-    for (int x = 0; x < SHIP_GRID_SIZE; ++x)
+  for (int y = 0; y < ShipLayout::shipSize; ++y)
+    for (int x = 0; x < ShipLayout::shipSize; ++x)
       if (selectedTiles_[y][x])
         tiles.push_back({ y, x });
 
@@ -112,11 +110,10 @@ drawRoom(u32 room) {
   Game::setDrawColor({ 224, 224, 224, 255 });
 
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
+  const auto GRID_SIZE = ShipLayout::tileSize * ShipLayout::shipSize;
   const Rect GRID_RECT = {
-    WINDOW_SIZE.x / 2 - TILE_SIZE * SHIP_GRID_SIZE / 2,
-    WINDOW_SIZE.y / 2 - TILE_SIZE * SHIP_GRID_SIZE / 2,
-    TILE_SIZE * SHIP_GRID_SIZE,
-    TILE_SIZE * SHIP_GRID_SIZE
+    WINDOW_SIZE.x / 2 - GRID_SIZE / 2, WINDOW_SIZE.y / 2 - GRID_SIZE / 2,
+    GRID_SIZE, GRID_SIZE
   };
 
 
@@ -130,34 +127,34 @@ drawRoom(u32 room) {
 
   // Tile
   for (auto tile : tiles) {
-    int y = tile.first  * TILE_SIZE + GRID_RECT.y,
-        x = tile.second * TILE_SIZE + GRID_RECT.x;
-    Game::drawRect({ x, y, TILE_SIZE, TILE_SIZE });
+    int y = tile.first  * ShipLayout::tileSize + GRID_RECT.y,
+        x = tile.second * ShipLayout::tileSize + GRID_RECT.x;
+    Game::drawRect({ x, y, ShipLayout::tileSize, ShipLayout::tileSize });
   }
 
   // Borders
   auto drawBorder = [&](bool connected) {
     for (auto tile : tiles) {
-      int y = tile.first  * TILE_SIZE + GRID_RECT.y,
-          x = tile.second * TILE_SIZE + GRID_RECT.x;
+      int y = tile.first  * ShipLayout::tileSize + GRID_RECT.y,
+          x = tile.second * ShipLayout::tileSize + GRID_RECT.x;
 
       if (!connected) {
         if (findTile(tile.first-1, tile.second) == connected)
           Game::drawLine({ x, y },
-                        { x + TILE_SIZE - 1, y });
+                        { x + ShipLayout::tileSize - 1, y });
 
         if (findTile(tile.first, tile.second-1) == connected)
           Game::drawLine({ x, y },
-                        { x, y + TILE_SIZE - 1 });
+                        { x, y + ShipLayout::tileSize - 1 });
       }
 
       if (findTile(tile.first+1, tile.second) == connected)
-        Game::drawLine({ x, y + TILE_SIZE - 1 },
-                      { x + TILE_SIZE - 1, y + TILE_SIZE - 1 });
+        Game::drawLine({ x, y + ShipLayout::tileSize - 1 },
+                      { x + ShipLayout::tileSize - 1, y + ShipLayout::tileSize - 1 });
 
       if (findTile(tile.first, tile.second+1) == connected)
-        Game::drawLine({ x + TILE_SIZE - 1, y },
-                      { x + TILE_SIZE - 1, y + TILE_SIZE - 1 });
+        Game::drawLine({ x + ShipLayout::tileSize - 1, y },
+                      { x + ShipLayout::tileSize - 1, y + ShipLayout::tileSize - 1 });
     }
   };
 
@@ -189,16 +186,16 @@ setTileSelection(int x, int y, bool select) {
 }
 
 int
-countConnectedComponents(const ShipGrid& tiles) {
+countConnectedComponents(const ShipLayout::ShipGrid& tiles) {
   int connectedComponents = 0;
 
   // TODO: std::array!
-  ShipGrid visited {};
+  ShipLayout::ShipGrid visited {};
 
   std::function<void(int, int)> floodfill = [&](int y, int x) {
     if (visited[y][x] or
-        y < 0 or y >= SHIP_GRID_SIZE or
-        x < 0 or x >= SHIP_GRID_SIZE)
+        y < 0 or y >= ShipLayout::shipSize or
+        x < 0 or x >= ShipLayout::shipSize)
       return;
     visited[y][x] = 1;
 
@@ -210,8 +207,8 @@ countConnectedComponents(const ShipGrid& tiles) {
     }
   };
 
-  for (int y = 0; y < SHIP_GRID_SIZE; ++y) {
-    for (int x = 0; x < SHIP_GRID_SIZE; ++x) {
+  for (int y = 0; y < ShipLayout::shipSize; ++y) {
+    for (int x = 0; x < ShipLayout::shipSize; ++x) {
       const auto tileActive = tiles[y][x];
       if (!visited[y][x] and tileActive) {
         // Flood Fill
@@ -231,11 +228,10 @@ draw() {
   const Vec2 mousePos = Mouse::getPosition();
 
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
+  const auto GRID_SIZE = ShipLayout::tileSize * ShipLayout::shipSize;
   const Rect GRID_RECT = {
-    WINDOW_SIZE.x / 2 - TILE_SIZE * SHIP_GRID_SIZE / 2,
-    WINDOW_SIZE.y / 2 - TILE_SIZE * SHIP_GRID_SIZE / 2,
-    TILE_SIZE * SHIP_GRID_SIZE,
-    TILE_SIZE * SHIP_GRID_SIZE
+    WINDOW_SIZE.x / 2 - GRID_SIZE / 2, WINDOW_SIZE.y / 2 - GRID_SIZE / 2,
+    GRID_SIZE, GRID_SIZE
   };
 
   // Grid
@@ -243,9 +239,9 @@ draw() {
   Game::drawRect(GRID_RECT);
 
   Game::setDrawColor({ 48, 48, 48, 255 });
-  for (int i = 0; i <= SHIP_GRID_SIZE; ++i) {
-    int y = i * TILE_SIZE + GRID_RECT.y-1,
-        x = i * TILE_SIZE + GRID_RECT.x-1;
+  for (int i = 0; i <= ShipLayout::shipSize; ++i) {
+    int y = i * ShipLayout::tileSize + GRID_RECT.y-1,
+        x = i * ShipLayout::tileSize + GRID_RECT.x-1;
     Game::drawLine({ GRID_RECT.x - 1, y }, { GRID_RECT.x + GRID_RECT.w - 1, y });
     Game::drawLine({ x, GRID_RECT.y - 1 }, { x, GRID_RECT.y + GRID_RECT.h - 1 });
   }
@@ -256,12 +252,12 @@ draw() {
 
   // Selected tiles
   Game::setDrawColor({ 128, 170, 128, 192 });
-  for (int i = 0; i < SHIP_GRID_SIZE; ++i) {
-    for (int j = 0; j < SHIP_GRID_SIZE; ++j) {
+  for (int i = 0; i < ShipLayout::shipSize; ++i) {
+    for (int j = 0; j < ShipLayout::shipSize; ++j) {
       if (selectedTiles_[i][j]) {
-        int y = i * TILE_SIZE + GRID_RECT.y,
-            x = j * TILE_SIZE + GRID_RECT.x;
-        Game::drawRect({ x, y, TILE_SIZE, TILE_SIZE });
+        int y = i * ShipLayout::tileSize + GRID_RECT.y,
+            x = j * ShipLayout::tileSize + GRID_RECT.x;
+        Game::drawRect({ x, y, ShipLayout::tileSize, ShipLayout::tileSize });
       }
     }
   }
@@ -269,15 +265,15 @@ draw() {
   // Mouse over tile
   if (pointInsideRect(mousePos, GRID_RECT)) {
     Vec2 tileMouse = {
-      (mousePos.x - GRID_RECT.x) / TILE_SIZE,
-      (mousePos.y - GRID_RECT.y) / TILE_SIZE
+      (mousePos.x - GRID_RECT.x) / ShipLayout::tileSize,
+      (mousePos.y - GRID_RECT.y) / ShipLayout::tileSize
     };
 
-    int y = tileMouse.y * TILE_SIZE + GRID_RECT.y,
-        x = tileMouse.x * TILE_SIZE + GRID_RECT.x;
+    int y = tileMouse.y * ShipLayout::tileSize + GRID_RECT.y,
+        x = tileMouse.x * ShipLayout::tileSize + GRID_RECT.x;
 
     Game::setDrawColor({ 128, 224, 128, 192 });
-    Game::drawRect({ x, y, TILE_SIZE, TILE_SIZE });
+    Game::drawRect({ x, y, ShipLayout::tileSize, ShipLayout::tileSize });
   }
 }
 
@@ -286,17 +282,16 @@ update() {
   const Vec2 mousePos = Mouse::getPosition();
 
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
+  const auto GRID_SIZE = ShipLayout::tileSize * ShipLayout::shipSize;
   const Rect GRID_RECT = {
-    WINDOW_SIZE.x / 2 - TILE_SIZE * SHIP_GRID_SIZE / 2,
-    WINDOW_SIZE.y / 2 - TILE_SIZE * SHIP_GRID_SIZE / 2,
-    TILE_SIZE * SHIP_GRID_SIZE,
-    TILE_SIZE * SHIP_GRID_SIZE
+    WINDOW_SIZE.x / 2 - GRID_SIZE / 2, WINDOW_SIZE.y / 2 - GRID_SIZE / 2,
+    GRID_SIZE, GRID_SIZE
   };
 
   if (pointInsideRect(mousePos, GRID_RECT)) {
     const Vec2 tileMouse = {
-      (mousePos.x - GRID_RECT.x) / TILE_SIZE,
-      (mousePos.y - GRID_RECT.y) / TILE_SIZE
+      (mousePos.x - GRID_RECT.x) / ShipLayout::tileSize,
+      (mousePos.y - GRID_RECT.y) / ShipLayout::tileSize
     };
 
     if (Mouse::isButtonDown(Mouse::Left)) {
