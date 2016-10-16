@@ -7,7 +7,7 @@
 const std::string title = "Life, the Universe and Everything - " + VERSION;
 
 int main() {
-  Game::start(title, 800, 600);
+  Game::start(title, 1024, 768);
   Game::run();
   Game::destroy();
 
