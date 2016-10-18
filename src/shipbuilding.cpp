@@ -60,8 +60,8 @@ createRoom() {
   // Get tiles vector from selected grid
   std::vector<std::pair<int, int>> tiles;
 
-  for (int y = 0; y < ShipLayout::shipSize; ++y)
-    for (int x = 0; x < ShipLayout::shipSize; ++x)
+  for (int y = 0; y < ShipLayout::ShipSize; ++y)
+    for (int x = 0; x < ShipLayout::ShipSize; ++x)
       if (selectedTiles_[y][x])
         tiles.push_back({ y, x });
 
@@ -110,7 +110,7 @@ drawRoom(u32 room) {
   Game::setDrawColor({ 224, 224, 224, 255 });
 
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
-  const auto GRID_SIZE = ShipLayout::tileSize * ShipLayout::shipSize;
+  const auto GRID_SIZE = ShipLayout::TileSize * ShipLayout::ShipSize;
   const Rect GRID_RECT = {
     WINDOW_SIZE.x / 2 - GRID_SIZE / 2, WINDOW_SIZE.y / 2 - GRID_SIZE / 2,
     GRID_SIZE, GRID_SIZE
@@ -127,34 +127,34 @@ drawRoom(u32 room) {
 
   // Tile
   for (auto tile : tiles) {
-    int y = tile.first  * ShipLayout::tileSize + GRID_RECT.y,
-        x = tile.second * ShipLayout::tileSize + GRID_RECT.x;
-    Game::drawRect({ x, y, ShipLayout::tileSize, ShipLayout::tileSize });
+    int y = tile.first  * ShipLayout::TileSize + GRID_RECT.y,
+        x = tile.second * ShipLayout::TileSize + GRID_RECT.x;
+    Game::drawRect({ x, y, ShipLayout::TileSize, ShipLayout::TileSize });
   }
 
   // Borders
   auto drawBorder = [&](bool connected) {
     for (auto tile : tiles) {
-      int y = tile.first  * ShipLayout::tileSize + GRID_RECT.y,
-          x = tile.second * ShipLayout::tileSize + GRID_RECT.x;
+      int y = tile.first  * ShipLayout::TileSize + GRID_RECT.y,
+          x = tile.second * ShipLayout::TileSize + GRID_RECT.x;
 
       if (!connected) {
         if (findTile(tile.first-1, tile.second) == connected)
           Game::drawLine({ x, y },
-                        { x + ShipLayout::tileSize - 1, y });
+                        { x + ShipLayout::TileSize - 1, y });
 
         if (findTile(tile.first, tile.second-1) == connected)
           Game::drawLine({ x, y },
-                        { x, y + ShipLayout::tileSize - 1 });
+                        { x, y + ShipLayout::TileSize - 1 });
       }
 
       if (findTile(tile.first+1, tile.second) == connected)
-        Game::drawLine({ x, y + ShipLayout::tileSize - 1 },
-                      { x + ShipLayout::tileSize - 1, y + ShipLayout::tileSize - 1 });
+        Game::drawLine({ x, y + ShipLayout::TileSize - 1 },
+                      { x + ShipLayout::TileSize - 1, y + ShipLayout::TileSize - 1 });
 
       if (findTile(tile.first, tile.second+1) == connected)
-        Game::drawLine({ x + ShipLayout::tileSize - 1, y },
-                      { x + ShipLayout::tileSize - 1, y + ShipLayout::tileSize - 1 });
+        Game::drawLine({ x + ShipLayout::TileSize - 1, y },
+                      { x + ShipLayout::TileSize - 1, y + ShipLayout::TileSize - 1 });
     }
   };
 
@@ -194,8 +194,8 @@ countConnectedComponents(const ShipLayout::ShipGrid& tiles) {
 
   std::function<void(int, int)> floodfill = [&](int y, int x) {
     if (visited[y][x] or
-        y < 0 or y >= ShipLayout::shipSize or
-        x < 0 or x >= ShipLayout::shipSize)
+        y < 0 or y >= ShipLayout::ShipSize or
+        x < 0 or x >= ShipLayout::ShipSize)
       return;
     visited[y][x] = 1;
 
@@ -207,8 +207,8 @@ countConnectedComponents(const ShipLayout::ShipGrid& tiles) {
     }
   };
 
-  for (int y = 0; y < ShipLayout::shipSize; ++y) {
-    for (int x = 0; x < ShipLayout::shipSize; ++x) {
+  for (int y = 0; y < ShipLayout::ShipSize; ++y) {
+    for (int x = 0; x < ShipLayout::ShipSize; ++x) {
       const auto tileActive = tiles[y][x];
       if (!visited[y][x] and tileActive) {
         // Flood Fill
@@ -228,7 +228,7 @@ draw() {
   const Vec2 mousePos = Mouse::getPosition();
 
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
-  const auto GRID_SIZE = ShipLayout::tileSize * ShipLayout::shipSize;
+  const auto GRID_SIZE = ShipLayout::TileSize * ShipLayout::ShipSize;
   const Rect GRID_RECT = {
     WINDOW_SIZE.x / 2 - GRID_SIZE / 2, WINDOW_SIZE.y / 2 - GRID_SIZE / 2,
     GRID_SIZE, GRID_SIZE
@@ -239,9 +239,9 @@ draw() {
   Game::drawRect(GRID_RECT);
 
   Game::setDrawColor({ 48, 48, 48, 255 });
-  for (int i = 0; i <= ShipLayout::shipSize; ++i) {
-    int y = i * ShipLayout::tileSize + GRID_RECT.y-1,
-        x = i * ShipLayout::tileSize + GRID_RECT.x-1;
+  for (int i = 0; i <= ShipLayout::ShipSize; ++i) {
+    int y = i * ShipLayout::TileSize + GRID_RECT.y-1,
+        x = i * ShipLayout::TileSize + GRID_RECT.x-1;
     Game::drawLine({ GRID_RECT.x - 1, y }, { GRID_RECT.x + GRID_RECT.w - 1, y });
     Game::drawLine({ x, GRID_RECT.y - 1 }, { x, GRID_RECT.y + GRID_RECT.h - 1 });
   }
@@ -252,12 +252,12 @@ draw() {
 
   // Selected tiles
   Game::setDrawColor({ 128, 170, 128, 192 });
-  for (int i = 0; i < ShipLayout::shipSize; ++i) {
-    for (int j = 0; j < ShipLayout::shipSize; ++j) {
+  for (int i = 0; i < ShipLayout::ShipSize; ++i) {
+    for (int j = 0; j < ShipLayout::ShipSize; ++j) {
       if (selectedTiles_[i][j]) {
-        int y = i * ShipLayout::tileSize + GRID_RECT.y,
-            x = j * ShipLayout::tileSize + GRID_RECT.x;
-        Game::drawRect({ x, y, ShipLayout::tileSize, ShipLayout::tileSize });
+        int y = i * ShipLayout::TileSize + GRID_RECT.y,
+            x = j * ShipLayout::TileSize + GRID_RECT.x;
+        Game::drawRect({ x, y, ShipLayout::TileSize, ShipLayout::TileSize });
       }
     }
   }
@@ -265,15 +265,15 @@ draw() {
   // Mouse over tile
   if (pointInsideRect(mousePos, GRID_RECT)) {
     Vec2 tileMouse = {
-      (mousePos.x - GRID_RECT.x) / ShipLayout::tileSize,
-      (mousePos.y - GRID_RECT.y) / ShipLayout::tileSize
+      (mousePos.x - GRID_RECT.x) / ShipLayout::TileSize,
+      (mousePos.y - GRID_RECT.y) / ShipLayout::TileSize
     };
 
-    int y = tileMouse.y * ShipLayout::tileSize + GRID_RECT.y,
-        x = tileMouse.x * ShipLayout::tileSize + GRID_RECT.x;
+    int y = tileMouse.y * ShipLayout::TileSize + GRID_RECT.y,
+        x = tileMouse.x * ShipLayout::TileSize + GRID_RECT.x;
 
     Game::setDrawColor({ 128, 224, 128, 192 });
-    Game::drawRect({ x, y, ShipLayout::tileSize, ShipLayout::tileSize });
+    Game::drawRect({ x, y, ShipLayout::TileSize, ShipLayout::TileSize });
   }
 }
 
@@ -282,7 +282,7 @@ update() {
   const Vec2 mousePos = Mouse::getPosition();
 
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
-  const auto GRID_SIZE = ShipLayout::tileSize * ShipLayout::shipSize;
+  const auto GRID_SIZE = ShipLayout::TileSize * ShipLayout::ShipSize;
   const Rect GRID_RECT = {
     WINDOW_SIZE.x / 2 - GRID_SIZE / 2, WINDOW_SIZE.y / 2 - GRID_SIZE / 2,
     GRID_SIZE, GRID_SIZE
@@ -290,8 +290,8 @@ update() {
 
   if (pointInsideRect(mousePos, GRID_RECT)) {
     const Vec2 tileMouse = {
-      (mousePos.x - GRID_RECT.x) / ShipLayout::tileSize,
-      (mousePos.y - GRID_RECT.y) / ShipLayout::tileSize
+      (mousePos.x - GRID_RECT.x) / ShipLayout::TileSize,
+      (mousePos.y - GRID_RECT.y) / ShipLayout::TileSize
     };
 
     if (Mouse::isButtonDown(Mouse::Left)) {
