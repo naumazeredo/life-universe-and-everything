@@ -11,7 +11,7 @@
 class Font {
 public:
   Font() = default;
-  Font(/*const std::string&,*/ int);
+  explicit Font(/*const std::string&,*/ int);
 
   void load(/*const std::string&,*/ int);
   void destroy();

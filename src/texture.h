@@ -13,7 +13,7 @@ class Font;
 class Texture {
 public:
   Texture() = default;
-  Texture(const std::string&);
+  explicit Texture(const std::string&);
   Texture(const std::string&, const Font&);
 
   void load(const std::string&);

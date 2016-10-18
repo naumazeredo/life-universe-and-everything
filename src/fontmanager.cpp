@@ -9,7 +9,9 @@ namespace FontManager {
 
 // Internals
 namespace {
-  std::map<int, Font> fonts_;
+
+std::map<int, Font> fonts_;
+
 }
 
 void
@@ -20,6 +22,7 @@ start() {
 
 void
 destroy() {
+  destroyAllFonts();
   TTF_Quit();
 }
 
@@ -30,7 +33,7 @@ loadFont(/*const std::string& path,*/ int size) {
     return font->second;
   }
 
-  fonts_.emplace(size, size);
+  fonts_.emplace(size, Font { size });
   return fonts_[size];
 }
 
