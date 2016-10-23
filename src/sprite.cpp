@@ -17,6 +17,13 @@ Sprite(const std::string& path, Vec2f size) {
 }
 
 Sprite::
+Sprite(const std::string& path, Rect clip) {
+  setTexture(path);
+  size_ = { (float)clip.w, (float)clip.h };
+  clip_ = clip;
+}
+
+Sprite::
 Sprite(const std::string& path, Vec2f size, Rect clip) : Sprite(path, size) {
   clip_ = clip;
 }
@@ -32,6 +39,13 @@ Sprite::
 Sprite(Texture texture, Vec2f size) {
   setTexture(texture);
   size_ = size;
+}
+
+Sprite::
+Sprite(Texture texture, Rect clip) {
+  setTexture(texture);
+  size_ = { (float)clip.w, (float)clip.h };
+  clip_ = clip;
 }
 
 Sprite::

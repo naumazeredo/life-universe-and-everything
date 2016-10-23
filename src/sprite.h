@@ -12,9 +12,11 @@ public:
   Sprite() = default;
   Sprite(const std::string&);
   Sprite(const std::string&, Vec2f);
+  Sprite(const std::string&, Rect);
   Sprite(const std::string&, Vec2f, Rect);
   Sprite(Texture);
   Sprite(Texture, Vec2f);
+  Sprite(Texture, Rect);
   Sprite(Texture, Vec2f, Rect);
 
   inline Texture getTexture() const { return texture_; }
