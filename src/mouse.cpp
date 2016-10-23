@@ -15,6 +15,7 @@ u32  state         { 0 },
 
 Vec2 getPosition()         { return pos; }
 Vec2 getRelativePosition() { return relativePos; }
+Vec2 getLastPosition()     { return { pos.x - relativePos.x, pos.y - relativePos.y }; }
 
 bool isButtonDown(Button button)     { return state & button; }
 bool isButtonUp(Button button)       { return (!state) & button; }
