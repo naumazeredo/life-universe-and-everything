@@ -133,7 +133,15 @@ _Probably FTL_ races will change!
   - [ ] Races
   - [ ] Sectors
   - [ ] Random events
-
+- [ ] Game graphics
+  - [ ] Main menu
+  - [ ] Hangar
+  - [ ] Battle
+  - [ ] Races
+  - [ ] Sectors
+  - [ ] Shops
+- [ ] Tutorial
+- [ ] Spritesheet builder!
 
 # Dependencies
 
