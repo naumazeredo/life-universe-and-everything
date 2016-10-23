@@ -16,7 +16,10 @@
 namespace Game {
 
 namespace {
-  void loadContent() {}
+  void loadContent() {
+    ShipBuilding::start();
+  }
+
   void logic() {}
 
   SDL_Window*   window_   = nullptr;

@@ -13,6 +13,8 @@
 #include "game.h"
 #include "mouse.h"
 #include "keyboard.h"
+#include "sprite.h"
+#include "button.h"
 
 namespace ShipBuilding {
 
@@ -31,6 +33,10 @@ ShipLayout::ShipGrid selectedTiles_ = {};
 u32 roomCount_;
 std::unordered_map<u32, Room> rooms_;
 
+// GUI
+Sprite guiTitle, guiMenuBg;
+Button guiBack, guiStart, guiBtnTile, guiBtnDoor, guiBtnExtra;
+
 bool createRoom();
 bool assignSystemToRoom(u32, u32);
 void drawRoom(u32);
@@ -40,6 +46,9 @@ int countConnectedComponents(const ShipLayout::ShipGrid&);
 
 u32 getTileRoom(int x, int y) { return tiles_[y][x]; }
 bool isTileSelected(int x, int y) { return selectedTiles_[y][x]; }
+
+void drawGUI();
+void updateGUI();
 
 bool
 createRoom() {
@@ -221,6 +230,61 @@ countConnectedComponents(const ShipLayout::ShipGrid& tiles) {
   return connectedComponents;
 }
 
+void drawGUI() {
+  const Vec2 WINDOW_SIZE = Game::getWindowSize();
+
+  // FIXME: API consistency issues!!!
+  // TODO: Create way to anchor drawing to window corners/sides to ease sprite drawing
+  guiTitle.draw((WINDOW_SIZE.x - guiTitle.getClip().w)/2, 0);
+  guiBack.draw();
+  guiStart.draw();
+
+  guiMenuBg.draw((WINDOW_SIZE.x - guiMenuBg.getClip().w)/2,
+                 WINDOW_SIZE.y - guiMenuBg.getClip().h);
+  guiBtnTile.draw();
+  guiBtnDoor.draw();
+  guiBtnExtra.draw();
+}
+
+void updateGUI() {
+  guiBtnTile.update();
+  guiBtnDoor.update();
+  guiBtnExtra.update();
+}
+
+}
+
+void start() {
+  const Vec2 WINDOW_SIZE = Game::getWindowSize();
+
+  // GUI sprites
+  guiTitle = Sprite("./assets/images/hangar/hangar-title.png");
+  guiMenuBg = Sprite("./assets/images/hangar/hangar-menu-bg.png");
+
+  guiBack.setSprite(Sprite("./assets/images/hangar/hangar-back.png"));
+  guiStart.setSprite(Sprite("./assets/images/hangar/hangar-start.png"));
+
+  // TODO: Create way to anchor drawing to window corners/sides to ease sprite drawing
+  guiBtnTile.setSprite(Sprite("./assets/images/hangar/hangar-button-tile.png", { 0, 0, 20, 20 }));
+  guiBtnDoor.setSprite(Sprite("./assets/images/hangar/hangar-button-door.png", { 0, 0, 20, 20 }));
+  guiBtnExtra.setSprite(Sprite("./assets/images/hangar/hangar-button-extra.png", { 0, 0, 20, 20 }));
+
+  // GUI position
+  guiStart.setPos({ (float)WINDOW_SIZE.x - guiStart.getSprite().getClip().w, 0.0f });
+  guiBtnTile.setPos({ (float)(WINDOW_SIZE.x - guiBtnTile.getSprite().getClip().w)/2 - 32,
+                      (float)WINDOW_SIZE.y - 31 });
+  guiBtnDoor.setPos({ (float)(WINDOW_SIZE.x - guiBtnTile.getSprite().getClip().w)/2,
+                      (float)WINDOW_SIZE.y - 31 });
+  guiBtnExtra.setPos({ (float)(WINDOW_SIZE.x - guiBtnTile.getSprite().getClip().w)/2 + 32,
+                      (float)WINDOW_SIZE.y - 31 });
+
+  // GUI button callbacks
+  guiBtnTile.setMouseEnterCallback([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20}); });
+  guiBtnTile.setMouseExitCallback ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20}); });
+  guiBtnDoor.setMouseEnterCallback([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20}); });
+  guiBtnDoor.setMouseExitCallback ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20}); });
+  guiBtnExtra.setMouseEnterCallback([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20}); });
+  guiBtnExtra.setMouseExitCallback ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20}); });
 }
 
 void
@@ -228,9 +292,11 @@ draw() {
   const Vec2 mousePos = Mouse::getPosition();
 
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
+
+  // TODO: Move grid constants to shipbuilding namespace
   const auto GRID_SIZE = ShipLayout::TileSize * ShipLayout::ShipSize;
   const Rect GRID_RECT = {
-    WINDOW_SIZE.x / 2 - GRID_SIZE / 2, WINDOW_SIZE.y / 2 - GRID_SIZE / 2,
+    WINDOW_SIZE.x / 2 - GRID_SIZE / 2, 135,
     GRID_SIZE, GRID_SIZE
   };
 
@@ -275,16 +341,20 @@ draw() {
     Game::setDrawColor({ 128, 224, 128, 192 });
     Game::drawRect({ x, y, ShipLayout::TileSize, ShipLayout::TileSize });
   }
+
+  // GUI
+  drawGUI();
 }
 
 void
 update() {
   const Vec2 mousePos = Mouse::getPosition();
-
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
+
+  // TODO: Move grid constants to shipbuilding namespace
   const auto GRID_SIZE = ShipLayout::TileSize * ShipLayout::ShipSize;
   const Rect GRID_RECT = {
-    WINDOW_SIZE.x / 2 - GRID_SIZE / 2, WINDOW_SIZE.y / 2 - GRID_SIZE / 2,
+    WINDOW_SIZE.x / 2 - GRID_SIZE / 2, 135,
     GRID_SIZE, GRID_SIZE
   };
 
@@ -306,6 +376,9 @@ update() {
   if (Keyboard::isKeyDown(Keyboard::Space)) {
     createRoom();
   }
+
+  // GUI
+  updateGUI();
 }
 
 }
