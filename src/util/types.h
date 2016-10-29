@@ -32,7 +32,7 @@ struct Rectf {
   float x, y, w, h;
   Vec2f pos() const   { return { x, y }; }
   Vec2f size() const  { return { w, h }; }
-  operator Rect()     { return { (int)x, (int)y, (int)w, (int)h }; }
+  operator Rect() const { return { (int)x, (int)y, (int)w, (int)h }; }
 };
 
 struct Color {
@@ -42,6 +42,6 @@ struct Color {
 
 // Functions
 
-inline bool pointInsideRect(Vec2 p, Rect r) {
+inline bool pointInsideRect(const Vec2 p, const Rect r) {
   return (p.x >= r.x and p.x < r.x+r.w and p.y >= r.y and p.y < r.y+r.h);
 }

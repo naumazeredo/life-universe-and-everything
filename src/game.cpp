@@ -11,16 +11,22 @@
 #include "keyboard.h"
 #include "sprite.h"
 #include "button.h"
-#include "shipbuilding.h"
+
+#include "scenemanager.h"
+#include "scene.h"
+#include "hangarscene.h"
 
 namespace Game {
 
 namespace {
-  void loadContent() {}
-  void logic() {}
-
   SDL_Window*   window_   = nullptr;
   SDL_Renderer* renderer_ = nullptr;
+
+  HangarScene hangarScene;
+
+  void loadContent() {
+    SceneManager::changeScene(&hangarScene);
+  }
 }
 
 //SDL_Window*   getWindow()   { return window_; }
@@ -55,8 +61,6 @@ destroy() {
 
 void
 run() {
-  ShipBuilding shipBuilding;
-
   loadContent();
 
   u32 lastTime = SDL_GetTicks();
@@ -72,12 +76,11 @@ run() {
     Keyboard::update();
     Mouse::update();
 
-    shipBuilding.update();
+    SceneManager::update();
 
     SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 0);
     SDL_RenderClear(renderer_);
-    logic();
-    shipBuilding.draw();
+    SceneManager::draw();
     SDL_RenderPresent(renderer_);
 
     // Framelimit

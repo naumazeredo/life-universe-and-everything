@@ -18,6 +18,7 @@ enum Button {
 
 Vec2 getPosition();
 Vec2 getRelativePosition();
+Vec2 getLastPosition();
 
 bool isButtonDown(Button);
 bool isButtonUp(Button);
