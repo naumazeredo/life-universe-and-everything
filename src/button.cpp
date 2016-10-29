@@ -8,13 +8,8 @@
 Button::
 Button(Vec2f pos, Sprite sprite) :
     pos_(pos), sprite_(sprite)
-{}
-
-Button::
-Button(Vec2f pos, Sprite sprite, ButtonCallback callback) :
-    Button(pos, sprite)
 {
-  onMouseClick_ = callback;
+  sprite_.setPosition(pos_);
 }
 
 void Button::
@@ -24,8 +19,7 @@ draw() {
 
 void Button::
 update() {
-  const auto size = sprite_.getSize();
-  const Rectf rect = { pos_.x, pos_.y, size.x, size.y };
+  const auto rect = sprite_.getDrawRect();
   if (pointInsideRect(Mouse::getPosition(), rect)) {
     if (onMouseClick_ and Mouse::isButtonPressed(Mouse::Left))
       onMouseClick_(*this);

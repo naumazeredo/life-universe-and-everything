@@ -231,16 +231,11 @@ countConnectedComponents(const ShipLayout::ShipGrid& tiles) {
 }
 
 void drawGUI() {
-  const Vec2 WINDOW_SIZE = Game::getWindowSize();
-
-  // FIXME: API consistency issues!!!
-  // TODO: Create way to anchor drawing to window corners/sides to ease sprite drawing
-  guiTitle.draw((WINDOW_SIZE.x - guiTitle.getClip().w)/2, 0);
+  guiTitle.draw();
   guiBack.draw();
   guiStart.draw();
 
-  guiMenuBg.draw((WINDOW_SIZE.x - guiMenuBg.getClip().w)/2,
-                 WINDOW_SIZE.y - guiMenuBg.getClip().h);
+  guiMenuBg.draw();
   guiBtnTile.draw();
   guiBtnDoor.draw();
   guiBtnExtra.draw();
@@ -258,33 +253,33 @@ void start() {
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
 
   // GUI sprites
-  guiTitle = Sprite("./assets/images/hangar/hangar-title.png");
-  guiMenuBg = Sprite("./assets/images/hangar/hangar-menu-bg.png");
+  guiTitle = Sprite("./assets/images/hangar/hangar-title.png", Anchors::Top, Anchors::Top);
+  guiMenuBg = Sprite("./assets/images/hangar/hangar-menu-bg.png", Anchors::Bottom, Anchors::Bottom);
 
   guiBack.setSprite(Sprite("./assets/images/hangar/hangar-back.png"));
   guiStart.setSprite(Sprite("./assets/images/hangar/hangar-start.png"));
 
   // TODO: Create way to anchor drawing to window corners/sides to ease sprite drawing
-  guiBtnTile.setSprite(Sprite("./assets/images/hangar/hangar-button-tile.png", { 0, 0, 20, 20 }));
-  guiBtnDoor.setSprite(Sprite("./assets/images/hangar/hangar-button-door.png", { 0, 0, 20, 20 }));
-  guiBtnExtra.setSprite(Sprite("./assets/images/hangar/hangar-button-extra.png", { 0, 0, 20, 20 }));
+  guiBtnTile.setSprite(Sprite("./assets/images/hangar/hangar-button-tile.png",
+                              { 0, 0, 20, 20 }, { -32, -32 },
+                              Anchors::Top, Anchors::Bottom));
+  guiBtnDoor.setSprite(Sprite("./assets/images/hangar/hangar-button-door.png",
+                              { 0, 0, 20, 20 }, { 0, -32 },
+                              Anchors::Top, Anchors::Bottom));
+  guiBtnExtra.setSprite(Sprite("./assets/images/hangar/hangar-button-extra.png",
+                               { 0, 0, 20, 20 }, { 32, -32 },
+                               Anchors::Top, Anchors::Bottom));
 
   // GUI position
   guiStart.setPos({ (float)WINDOW_SIZE.x - guiStart.getSprite().getClip().w, 0.0f });
-  guiBtnTile.setPos({ (float)(WINDOW_SIZE.x - guiBtnTile.getSprite().getClip().w)/2 - 32,
-                      (float)WINDOW_SIZE.y - 31 });
-  guiBtnDoor.setPos({ (float)(WINDOW_SIZE.x - guiBtnTile.getSprite().getClip().w)/2,
-                      (float)WINDOW_SIZE.y - 31 });
-  guiBtnExtra.setPos({ (float)(WINDOW_SIZE.x - guiBtnTile.getSprite().getClip().w)/2 + 32,
-                      (float)WINDOW_SIZE.y - 31 });
 
   // GUI button callbacks
-  guiBtnTile.setMouseEnterCallback([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20}); });
-  guiBtnTile.setMouseExitCallback ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20}); });
-  guiBtnDoor.setMouseEnterCallback([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20}); });
-  guiBtnDoor.setMouseExitCallback ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20}); });
-  guiBtnExtra.setMouseEnterCallback([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20}); });
-  guiBtnExtra.setMouseExitCallback ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20}); });
+  guiBtnTile.setMouseEnterCallback([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20 }); });
+  guiBtnTile.setMouseExitCallback ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20 }); });
+  guiBtnDoor.setMouseEnterCallback([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20 }); });
+  guiBtnDoor.setMouseExitCallback ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20 }); });
+  guiBtnExtra.setMouseEnterCallback([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20 }); });
+  guiBtnExtra.setMouseExitCallback ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20 }); });
 }
 
 void
