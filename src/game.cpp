@@ -11,13 +11,13 @@
 #include "keyboard.h"
 #include "sprite.h"
 #include "button.h"
-#include "shipbuilding.h"
+#include "hangar.h"
 
 namespace Game {
 
 namespace {
   void loadContent() {
-    ShipBuilding::start();
+    Hangar::start();
   }
 
   void logic() {}
@@ -73,12 +73,12 @@ run() {
     Keyboard::update();
     Mouse::update();
 
-    ShipBuilding::update();
+    Hangar::update();
 
     SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 0);
     SDL_RenderClear(renderer_);
     logic();
-    ShipBuilding::draw();
+    Hangar::draw();
     SDL_RenderPresent(renderer_);
 
     // Framelimit

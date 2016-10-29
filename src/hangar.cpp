@@ -1,13 +1,14 @@
 /**
-  shipbuilding.cpp
+  hangar.cpp
  */
-#include "shipbuilding.h"
+#include "hangar.h"
 
 #include <unordered_map>
 #include <vector>
 #include <array>
 #include <algorithm>
 #include <functional>
+
 #include "util/types.h"
 #include "shiplayout.h"
 #include "game.h"
@@ -16,7 +17,7 @@
 #include "sprite.h"
 #include "button.h"
 
-namespace ShipBuilding {
+namespace Hangar {
 
 // Internals
 namespace {

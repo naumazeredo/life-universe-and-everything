@@ -1,10 +1,10 @@
-// TODO: Rename to Hangar
 /**
-  shipbuilding.h
+  hangar.h
  */
 #pragma once
 
-namespace ShipBuilding {
+// TODO: Modify Hangar to be a Scene!
+namespace Hangar {
 
 void start();
 void draw();

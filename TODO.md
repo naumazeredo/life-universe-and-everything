@@ -9,7 +9,7 @@
 - [ ] [GFX Implementation] Add sprite flipping
 - [ ] [GFX Implementation] Create screen anchors on ~~Sprite~~ GUI Widget
     (to ease gui drawing and to allow multiple screen resolutions)
-- [ ] [Implementation] Rename ShipBuilding to Hangar
+- [x] [Implementation] Rename ShipBuilding to Hangar
 - [ ] [GUI Hangar] Finish Hangar basic GUI
 - [ ] [GUI Hangar] Create buttons for creating/deleting rooms
 - [ ] [GUI Hangar] Create buttons for creating/deleting doors
