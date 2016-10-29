@@ -1,57 +1,17 @@
 /**
   hangar.cpp
  */
-#include "hangar.h"
+#include "hangarscene.h"
 
-#include <unordered_map>
-#include <vector>
 #include <array>
 #include <algorithm>
 #include <functional>
 
-#include "util/types.h"
-#include "shiplayout.h"
 #include "game.h"
 #include "mouse.h"
 #include "keyboard.h"
-#include "sprite.h"
-#include "button.h"
 
-namespace Hangar {
-
-// Internals
-namespace {
-
-struct Room {
-  u32 system;
-  std::vector<std::pair<int, int>> tiles;
-};
-
-ShipLayout::ShipGrid tiles_         = {};
-ShipLayout::ShipGrid selectedTiles_ = {};
-
-// TODO: Do this better!
-u32 roomCount_;
-std::unordered_map<u32, Room> rooms_;
-
-// GUI
-Sprite guiTitle, guiMenuBg;
-Button guiBack, guiStart, guiBtnTile, guiBtnDoor, guiBtnExtra;
-
-bool createRoom();
-bool assignSystemToRoom(u32, u32);
-void drawRoom(u32);
-void removeTileFromRoom(int, int, u32);
-void setTileSelection(int, int, bool);
-int countConnectedComponents(const ShipLayout::ShipGrid&);
-
-u32 getTileRoom(int x, int y) { return tiles_[y][x]; }
-bool isTileSelected(int x, int y) { return selectedTiles_[y][x]; }
-
-void drawGUI();
-void updateGUI();
-
-bool
+bool HangarScene::
 createRoom() {
   // Verify if selected tiles are connected
   // TODO: use C++14 to auto in lambda parameters
@@ -106,7 +66,7 @@ createRoom() {
   return true;
 }
 
-bool
+bool HangarScene::
 assignSystemToRoom(u32 room, u32 system) {
   if (room == 0 or room >= roomCount_)
     return false;
@@ -115,7 +75,7 @@ assignSystemToRoom(u32 room, u32 system) {
   return true;
 }
 
-void
+void HangarScene::
 drawRoom(u32 room) {
   Game::setDrawColor({ 224, 224, 224, 255 });
 
@@ -175,7 +135,7 @@ drawRoom(u32 room) {
   drawBorder(false);
 }
 
-void
+void HangarScene::
 removeTileFromRoom(int x, int y, u32 room) {
   if (room == 0 or room >= roomCount_ or rooms_.find(room) == rooms_.end())
     return;
@@ -190,12 +150,12 @@ removeTileFromRoom(int x, int y, u32 room) {
 }
 
 // TODO: add callback if couldn't select
-void
+void HangarScene::
 setTileSelection(int x, int y, bool select) {
   selectedTiles_[y][x] = select;
 }
 
-int
+int HangarScene::
 countConnectedComponents(const ShipLayout::ShipGrid& tiles) {
   int connectedComponents = 0;
 
@@ -231,7 +191,8 @@ countConnectedComponents(const ShipLayout::ShipGrid& tiles) {
   return connectedComponents;
 }
 
-void drawGUI() {
+void HangarScene::
+drawGUI() {
   guiTitle.draw();
   guiBack.draw();
   guiStart.draw();
@@ -242,15 +203,15 @@ void drawGUI() {
   guiBtnExtra.draw();
 }
 
-void updateGUI() {
+void HangarScene::
+updateGUI() {
   guiBtnTile.update();
   guiBtnDoor.update();
   guiBtnExtra.update();
 }
 
-}
-
-void start() {
+void HangarScene::
+load() {
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
 
   // GUI sprites
@@ -283,7 +244,12 @@ void start() {
   guiBtnExtra.setMouseExitCallback ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20 }); });
 }
 
-void
+void HangarScene::
+unload() {
+  // TODO: unload GUI
+}
+
+void HangarScene::
 draw() {
   const Vec2 mousePos = Mouse::getPosition();
 
@@ -342,7 +308,7 @@ draw() {
   drawGUI();
 }
 
-void
+void HangarScene::
 update() {
   const Vec2 mousePos = Mouse::getPosition();
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
@@ -375,6 +341,4 @@ update() {
 
   // GUI
   updateGUI();
-}
-
 }

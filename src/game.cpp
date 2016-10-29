@@ -11,19 +11,22 @@
 #include "keyboard.h"
 #include "sprite.h"
 #include "button.h"
-#include "hangar.h"
+
+#include "scenemanager.h"
+#include "scene.h"
+#include "hangarscene.h"
 
 namespace Game {
 
 namespace {
-  void loadContent() {
-    Hangar::start();
-  }
-
-  void logic() {}
-
   SDL_Window*   window_   = nullptr;
   SDL_Renderer* renderer_ = nullptr;
+
+  HangarScene hangarScene;
+
+  void loadContent() {
+    SceneManager::changeScene(&hangarScene);
+  }
 }
 
 //SDL_Window*   getWindow()   { return window_; }
@@ -73,12 +76,11 @@ run() {
     Keyboard::update();
     Mouse::update();
 
-    Hangar::update();
+    SceneManager::update();
 
     SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 0);
     SDL_RenderClear(renderer_);
-    logic();
-    Hangar::draw();
+    SceneManager::draw();
     SDL_RenderPresent(renderer_);
 
     // Framelimit

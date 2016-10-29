@@ -4,7 +4,7 @@
 
 ## v0.1 - Hangar
 
-- [ ] [Scenes] Implement Scenes
+- [x] [Scenes] Implement Scenes
 - [ ] [GUI] Implement GUI classes
 - [ ] [GFX Implementation] Add sprite flipping
 - [ ] [GFX Implementation] Create screen anchors on ~~Sprite~~ GUI Widget
