@@ -9,11 +9,17 @@
 #include "util/types.h"
 #include "scene.h"
 #include "shiplayout.h"
-#include "sprite.h"
+//#include "sprite.h"
+
+#include "widget.h"
+#include "panel.h"
+#include "image.h"
 #include "button.h"
 
 class HangarScene final : public Scene {
 public:
+  HangarScene();
+
   virtual void load() override;
   virtual void unload() override;
   virtual void draw() override;
@@ -30,9 +36,6 @@ private:
   u32 getTileRoom(int x, int y) { return tiles_[y][x]; }
   bool isTileSelected(int x, int y) { return selectedTiles_[y][x]; }
 
-  void drawGUI();
-  void updateGUI();
-
   struct Room {
     u32 system;
     std::vector<std::pair<int, int>> tiles;
@@ -46,6 +49,7 @@ private:
   std::unordered_map<u32, Room> rooms_;
 
   // GUI
-  Sprite guiTitle, guiMenuBg;
-  Button guiBack, guiStart, guiBtnTile, guiBtnDoor, guiBtnExtra;
+  Panel gui;
+  Image imgTitle, imgMenuBg;
+  Button btnBack, btnStart, btnMenuTile, btnMenuDoor, btnMenuExtra;
 };

@@ -23,9 +23,11 @@ struct Vec2f;
 struct Rectf;
 struct Color;
 
+// TODO IMPORTANT: Create proper Vec2/Rect structs!
+
 struct Vec2f {
   float x, y;
-  operator Vec2()     { return { (int)x, (int)y }; }
+  operator Vec2() const { return { (int)x, (int)y }; }
 };
 
 struct Rectf {

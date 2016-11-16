@@ -10,6 +10,9 @@
 #include "mouse.h"
 #include "keyboard.h"
 #include "sprite.h"
+
+#include "guimanager.h"
+#include "widget.h"
 #include "button.h"
 
 #include "scenemanager.h"
@@ -77,10 +80,14 @@ run() {
     Mouse::update();
 
     SceneManager::update();
+    GuiManager::update();
 
     SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 0);
     SDL_RenderClear(renderer_);
+
     SceneManager::draw();
+    GuiManager::draw();
+
     SDL_RenderPresent(renderer_);
 
     // Framelimit

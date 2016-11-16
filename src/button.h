@@ -5,34 +5,27 @@
 
 #include <functional>
 #include "util/types.h"
-#include "sprite.h"
-
-// TODO: Create GUI Widget class and redo all GUI
+#include "widget.h"
+#include "image.h"
 
 class Button;
 
 typedef std::function<void(Button&)> ButtonCallback;
 
-class Button {
+class Button : public Image {
 public:
-  Button() = default;
-  Button(Vec2f, Sprite);
+  Button() {}
+  //Button(Vec2f pos, Sprite sprite) : pos_ { pos }, sprite_ { sprite } {}
+  virtual ~Button() {}
 
-  inline Vec2f   getPos()    const { return pos_;    }
-  inline Sprite  getSprite() const { return sprite_; }
-  inline Sprite& getSprite()       { return sprite_; }
-
-  inline void setPos(Vec2f pos)        { pos_ = pos; sprite_.setPosition(pos_); }
-  inline void setSprite(Sprite sprite) { sprite_ = sprite; pos_ = sprite_.getPosition(); }
   inline void setMouseClickCallback(ButtonCallback callback) { onMouseClick_ = callback; }
   inline void setMouseEnterCallback(ButtonCallback callback) { onMouseEnter_ = callback; }
   inline void setMouseExitCallback (ButtonCallback callback) { onMouseExit_  = callback; }
 
-  void draw();
-  void update();
+protected:
+  virtual void updateInternal() override;
+
 private:
-  Vec2f pos_ = { 0, 0 };
-  Sprite sprite_;
   ButtonCallback onMouseClick_,
                  onMouseEnter_,
                  onMouseExit_;

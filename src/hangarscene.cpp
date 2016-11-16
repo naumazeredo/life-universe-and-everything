@@ -11,6 +11,27 @@
 #include "mouse.h"
 #include "keyboard.h"
 
+#include "guimanager.h"
+
+HangarScene::
+HangarScene() {
+  gui.setFullscreen(true);
+
+  // Parenting
+  gui.addChildren({
+    &imgTitle,
+    &btnBack,
+    &btnStart,
+    &imgMenuBg
+  });
+
+  imgMenuBg.addChildren({
+    &btnMenuTile,
+    &btnMenuDoor,
+    &btnMenuExtra
+  });
+}
+
 bool HangarScene::
 createRoom() {
   // Verify if selected tiles are connected
@@ -82,7 +103,7 @@ drawRoom(u32 room) {
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
   const auto GRID_SIZE = ShipLayout::TileSize * ShipLayout::ShipSize;
   const Rect GRID_RECT = {
-    WINDOW_SIZE.x / 2 - GRID_SIZE / 2, WINDOW_SIZE.y / 2 - GRID_SIZE / 2,
+    WINDOW_SIZE.x / 2 - GRID_SIZE / 2, 135,
     GRID_SIZE, GRID_SIZE
   };
 
@@ -192,70 +213,78 @@ countConnectedComponents(const ShipLayout::ShipGrid& tiles) {
 }
 
 void HangarScene::
-drawGUI() {
-  guiTitle.draw();
-  guiBack.draw();
-  guiStart.draw();
-
-  guiMenuBg.draw();
-  guiBtnTile.draw();
-  guiBtnDoor.draw();
-  guiBtnExtra.draw();
-}
-
-void HangarScene::
-updateGUI() {
-  guiBtnTile.update();
-  guiBtnDoor.update();
-  guiBtnExtra.update();
-}
-
-void HangarScene::
 load() {
-  const Vec2 WINDOW_SIZE = Game::getWindowSize();
+  // Sprites
+  imgTitle .setSprite(Sprite { "./assets/images/hangar/hangar-title.png"   });
+  imgMenuBg.setSprite(Sprite { "./assets/images/hangar/hangar-menu-bg.png" });
+  btnBack  .setSprite(Sprite { "./assets/images/hangar/hangar-back.png"    });
+  btnStart .setSprite(Sprite { "./assets/images/hangar/hangar-start.png"   });
 
-  // GUI sprites
-  guiTitle = Sprite("./assets/images/hangar/hangar-title.png", Anchors::Top, Anchors::Top);
-  guiMenuBg = Sprite("./assets/images/hangar/hangar-menu-bg.png", Anchors::Bottom, Anchors::Bottom);
+  btnMenuTile.setSprite(Sprite {
+                          "./assets/images/hangar/hangar-button-tile.png",
+                          { 0, 0, 20, 20 }
+                        });
 
-  guiBack.setSprite(Sprite("./assets/images/hangar/hangar-back.png"));
-  guiStart.setSprite(Sprite("./assets/images/hangar/hangar-start.png"));
+  btnMenuDoor.setSprite(Sprite {
+                          "./assets/images/hangar/hangar-button-door.png",
+                          { 0, 0, 20, 20 },
+                        });
 
-  // TODO: Create way to anchor drawing to window corners/sides to ease sprite drawing
-  guiBtnTile.setSprite(Sprite("./assets/images/hangar/hangar-button-tile.png",
-                              { 0, 0, 20, 20 }, { -32, -32 },
-                              Anchors::Top, Anchors::Bottom));
-  guiBtnDoor.setSprite(Sprite("./assets/images/hangar/hangar-button-door.png",
-                              { 0, 0, 20, 20 }, { 0, -32 },
-                              Anchors::Top, Anchors::Bottom));
-  guiBtnExtra.setSprite(Sprite("./assets/images/hangar/hangar-button-extra.png",
-                               { 0, 0, 20, 20 }, { 32, -32 },
-                               Anchors::Top, Anchors::Bottom));
+  btnMenuExtra.setSprite(Sprite {
+                           "./assets/images/hangar/hangar-button-extra.png",
+                           { 0, 0, 20, 20 }
+                         });
 
-  // GUI position
-  guiStart.setPos({ (float)WINDOW_SIZE.x - guiStart.getSprite().getClip().w, 0.0f });
+  // Pivoting
+  imgTitle    .setPivot({ 0.5f, 0.0f });
+  imgMenuBg   .setPivot({ 0.5f, 1.0f });
+  btnStart    .setPivot({ 1.0f, 0.0f });
+  btnMenuTile .setPivot({ 0.5f, 0.5f });
+  btnMenuDoor .setPivot({ 0.5f, 0.5f });
+  btnMenuExtra.setPivot({ 0.5f, 0.5f });
 
-  // GUI button callbacks
-  guiBtnTile.setMouseEnterCallback([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20 }); });
-  guiBtnTile.setMouseExitCallback ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20 }); });
-  guiBtnDoor.setMouseEnterCallback([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20 }); });
-  guiBtnDoor.setMouseExitCallback ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20 }); });
-  guiBtnExtra.setMouseEnterCallback([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20 }); });
-  guiBtnExtra.setMouseExitCallback ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20 }); });
+  // Position
+  imgTitle .setPosition({ 0.5f, 0.0f });
+  imgMenuBg.setPosition({ 0.5f, 1.0f });
+
+  btnBack .setPosition({ 0.0f, 0.0f });
+  btnStart.setPosition({ 1.0f, 0.0f });
+
+  btnMenuTile .setPosition({ 0.5f, 0.5f });
+  btnMenuExtra.setPosition({ 0.5f, 0.5f });
+  btnMenuDoor .setPosition({ 0.5f, 0.5f });
+
+  btnMenuTile .setOffset({ -32, 0 });
+  btnMenuExtra.setOffset({  32, 0 });
+
+  // Button callbacks
+  btnMenuTile.setMouseEnterCallback ([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20 }); });
+  btnMenuTile.setMouseExitCallback  ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20 }); });
+
+  btnMenuDoor.setMouseEnterCallback ([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20 }); });
+  btnMenuDoor.setMouseExitCallback  ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20 }); });
+
+  btnMenuExtra.setMouseEnterCallback([](Button& btn) { btn.getSprite().setClip({ 20, 0, 20, 20 }); });
+  btnMenuExtra.setMouseExitCallback ([](Button& btn) { btn.getSprite().setClip({  0, 0, 20, 20 }); });
+
+  // Change layout
+  GuiManager::changeLayout(&gui);
 }
 
 void HangarScene::
 unload() {
-  // TODO: unload GUI
+  // TODO: Unload images!
+  GuiManager::popLayout();
 }
 
 void HangarScene::
 draw() {
+  // TODO IMPORTANT: Use GUI to draw shipbuilding!!!
   const Vec2 mousePos = Mouse::getPosition();
 
   const Vec2 WINDOW_SIZE = Game::getWindowSize();
 
-  // TODO: Move grid constants to shipbuilding namespace
+  // TODO: Move grid constants to somewhere more global!
   const auto GRID_SIZE = ShipLayout::TileSize * ShipLayout::ShipSize;
   const Rect GRID_RECT = {
     WINDOW_SIZE.x / 2 - GRID_SIZE / 2, 135,
@@ -303,9 +332,6 @@ draw() {
     Game::setDrawColor({ 128, 224, 128, 192 });
     Game::drawRect({ x, y, ShipLayout::TileSize, ShipLayout::TileSize });
   }
-
-  // GUI
-  drawGUI();
 }
 
 void HangarScene::
@@ -338,7 +364,4 @@ update() {
   if (Keyboard::isKeyDown(Keyboard::Space)) {
     createRoom();
   }
-
-  // GUI
-  updateGUI();
 }
