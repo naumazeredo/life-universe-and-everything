@@ -5,9 +5,9 @@
 ## v0.1 - Hangar
 
 - [x] [Scenes] Implement Scenes
-- [ ] [GUI] Implement GUI classes
+- [x] [GUI] Implement GUI classes
 - [ ] [GFX Implementation] Add sprite flipping
-- [ ] [GFX Implementation] Create screen anchors on ~~Sprite~~ GUI Widget
+- [x] [GFX Implementation] Create screen anchors on ~~Sprite~~ GUI Widget
     (to ease gui drawing and to allow multiple screen resolutions)
 - [x] [Implementation] Rename ShipBuilding to Hangar
 - [ ] [GUI Hangar] Finish Hangar basic GUI
